@@ -111,11 +111,30 @@ def save_manifest(root: Path, manifest: dict, source_root: Path, mode: str, dry_
         manifest["language"] = language
     else:
         manifest.setdefault("language", "en")
-    manifest["updated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
     path = manifest_path(root)
     if dry_run:
         print(f"would update {path.relative_to(root).as_posix()}")
         return
+
+    if path.exists():
+        try:
+            current = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            current = None
+        if isinstance(current, dict) and current.get("updated_at"):
+            current_content = {
+                key: value for key, value in current.items() if key != "updated_at"
+            }
+            desired_content = {
+                key: value for key, value in manifest.items() if key != "updated_at"
+            }
+            if current_content == desired_content:
+                manifest["updated_at"] = current["updated_at"]
+                return
+
+    manifest["updated_at"] = (
+        dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 

@@ -272,6 +272,14 @@ class InstallModeTests(unittest.TestCase):
             kb.install_core(install_args)
             managed = target / "90-系统" / "规则" / "写回规则.md"
             before = kb.file_sha256(managed)
+            manifest_path = target / ".obsidian-ai-workflow-kit" / "manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["updated_at"] = "2000-01-01T00:00:00+00:00"
+            manifest_path.write_text(
+                json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            manifest_before = manifest_path.read_bytes()
             output = io.StringIO()
             upgrade_args = argparse.Namespace(
                 target=str(target),
@@ -287,6 +295,7 @@ class InstallModeTests(unittest.TestCase):
                 kb.upgrade_core(upgrade_args)
 
             self.assertEqual(kb.file_sha256(managed), before)
+            self.assertEqual(manifest_path.read_bytes(), manifest_before)
             self.assertIn("0 updated", output.getvalue())
             self.assertIn("0 conflicts", output.getvalue())
 
