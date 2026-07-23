@@ -851,6 +851,18 @@ class InstallLanguageTests(unittest.TestCase):
             health_args = argparse.Namespace(vault=str(target), mode="barebone")
             self.assertEqual(kb.health_check(health_args), 0)
 
+    def test_chinese_root_agent_entries_point_to_the_real_system_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "vault"
+
+            kb.install_core(self.install_args(target, "zh-CN"))
+
+            for filename in ("CLAUDE.md", "AGENTS.md"):
+                text = (target / filename).read_text(encoding="utf-8")
+                self.assertIn("00-入口/开始这里.md", text)
+                self.assertIn("90-系统/", text)
+                self.assertNotIn("90-系统/AI/", text)
+
     def test_chinese_start_here_routes_document_organization_to_direct_suggestions(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "vault"
@@ -1354,6 +1366,35 @@ status: active
 
             self.assertEqual(count, 1)
             self.assertIn("CODEX-BRIDGE-legacy-project.md", report)
+
+    def test_ignores_archived_project_history_named_like_legacy_bridge(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / "10-Projects" / "history"
+            project.mkdir(parents=True)
+            history = project / "CODEX-BRIDGE-history-2026-05-30.md"
+            history.write_text(
+                """---
+type: project-history
+status: archived
+updated: 2026-05-20
+---
+
+# Historical record
+""",
+                encoding="utf-8",
+            )
+
+            report, count = kb.build_stale_report(
+                root,
+                max_age_days=7,
+                inbox_threshold=10,
+                today=kb.dt.date(2026, 6, 1),
+            )
+
+            self.assertEqual(count, 0)
+            self.assertNotIn(history.name, report)
+            self.assertIn("No stale bridge cards.", report)
 
     def test_reports_inbox_when_file_count_exceeds_threshold(self):
         with tempfile.TemporaryDirectory() as tmp:

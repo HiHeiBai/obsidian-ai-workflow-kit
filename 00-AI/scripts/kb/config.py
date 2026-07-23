@@ -219,7 +219,7 @@ ZH_CN_TARGET_RENAMES = [
     ("00-AI/config/stale-patterns.txt", "90-系统/配置/过时概念.txt"),
     ("00-AI/config", "90-系统/配置"),
     ("00-AI/scripts", "90-系统/脚本"),
-    ("00-AI", "90-系统/AI"),
+    ("00-AI", "90-系统"),
     ("01-Inbox/agent-handoffs", "01-收件箱/Agent交接"),
     ("01-Inbox/tasks", "01-收件箱/任务"),
     ("01-Inbox/dispatch-cards", "01-收件箱/派工卡"),

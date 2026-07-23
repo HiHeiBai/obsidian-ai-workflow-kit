@@ -493,7 +493,15 @@ def project_bridge_cards(root: Path, language: str | None = None) -> list[Path]:
         return []
     cards = list(projects_root.rglob("BRIDGE-*.md"))
     cards.extend(projects_root.rglob("CODEX-BRIDGE-*.md"))
-    return sorted(set(cards))
+    current_cards = []
+    for path in set(cards):
+        metadata, _text = read_frontmatter(path)
+        if metadata.get("type") == "project-history":
+            continue
+        if metadata.get("status") in {"done", "archived"}:
+            continue
+        current_cards.append(path)
+    return sorted(current_cards)
 
 
 def build_stale_report(
