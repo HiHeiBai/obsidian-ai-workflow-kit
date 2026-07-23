@@ -299,6 +299,20 @@ class InstallModeTests(unittest.TestCase):
             self.assertIn("0 updated", output.getvalue())
             self.assertIn("0 conflicts", output.getvalue())
 
+            upgrade_args.dry_run = True
+            dry_run_output = io.StringIO()
+            with redirect_stdout(dry_run_output):
+                kb.upgrade_core(upgrade_args)
+
+            self.assertIn(
+                "unchanged .obsidian-ai-workflow-kit/manifest.json",
+                dry_run_output.getvalue(),
+            )
+            self.assertNotIn(
+                "would update .obsidian-ai-workflow-kit/manifest.json",
+                dry_run_output.getvalue(),
+            )
+
     def test_shared_core_upgrade_removes_only_unmodified_retired_files(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "vault"
