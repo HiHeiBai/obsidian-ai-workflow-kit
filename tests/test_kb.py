@@ -1067,6 +1067,37 @@ class ProjectBridgeNamingTests(unittest.TestCase):
         self.assertIn("20-SharedAssets/01-user-assets/", text)
         self.assertIn("managed `02-modules/`", text)
 
+    def test_new_project_starts_compact_with_one_action_and_no_claimed_verification(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            kb.new_project(
+                argparse.Namespace(
+                    slug="compact-demo",
+                    vault=tmp,
+                    name="示例 Project",
+                    root=None,
+                    dry_run=False,
+                )
+            )
+            project = Path(tmp) / "10-Projects" / "compact-demo"
+            bridge = project / "BRIDGE-compact-demo.md"
+            text = bridge.read_text(encoding="utf-8")
+            metadata, _ = kb.read_frontmatter(bridge)
+            body = text.split("---", 2)[2]
+
+            self.assertLessEqual(len(body), 3000)
+            self.assertLessEqual(sum(bool(line.strip()) for line in body.splitlines()), 120)
+            self.assertEqual(text.count("## Next Action"), 1)
+            primary_actions = [
+                line.removeprefix("- Primary action: ")
+                for line in body.splitlines()
+                if line.startswith("- Primary action: ")
+            ]
+            self.assertEqual(primary_actions, [metadata["next_action"]])
+            self.assertFalse(metadata.get("last_verified"))
+            self.assertNotIn("## Next Startup", text)
+            self.assertNotIn("## Verification Log", text)
+            self.assertNotIn("## Next Action", (project / "README.md").read_text(encoding="utf-8"))
+
     def test_new_project_uses_agent_neutral_bridge_filename(self):
         with tempfile.TemporaryDirectory() as tmp:
             args = argparse.Namespace(
@@ -1450,10 +1481,11 @@ updated: 2026-05-20
                 today=kb.dt.date(2026, 6, 1),
             )
 
-            self.assertIn("updated` field", report)
+            self.assertIn("project sources", report)
             self.assertIn("current state", report)
-            self.assertIn("recent decisions", report)
-            self.assertIn("next startup action", report)
+            self.assertIn("last_verified", report)
+            self.assertIn("only when another window or agent needs to take over", report)
+            self.assertNotIn("handoff if this session changed project state", report)
 
     def test_stale_patterns_are_loaded_from_kit_config(self):
         with tempfile.TemporaryDirectory() as tmp:

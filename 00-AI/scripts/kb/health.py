@@ -27,7 +27,7 @@ from .config import (
     required_paths_for_mode,
     validate_language,
 )
-from .utils import file_sha256, has_chinese, iter_markdown_files, read_frontmatter_value, vault_root
+from .utils import file_sha256, frontmatter_scalar, has_chinese, iter_markdown_files, read_frontmatter_value, vault_root
 
 
 WIKILINK_PATTERN = re.compile(r"!?(?<!\\)\[\[([^\[\]\n]+)\]\]")
@@ -209,10 +209,7 @@ def read_frontmatter(path: Path) -> tuple[dict[str, str], str]:
         if not line or line[0].isspace() or ":" not in line:
             continue
         key, value = line.split(":", 1)
-        normalized = value.strip()
-        if " #" in normalized:
-            normalized = normalized.split(" #", 1)[0].rstrip()
-        metadata[key.strip()] = normalized.strip("\"'")
+        metadata[key.strip()] = frontmatter_scalar(value)
     return metadata, text
 
 
@@ -303,9 +300,6 @@ def check_typed_statuses(root: Path) -> list[str]:
                 f"unsupported {policy} status in {rel}: {status}; "
                 f"allowed={','.join(sorted(allowed))}"
             )
-        frontmatter_text = text[: text.find("\n---", 4)] if text.startswith("---\n") else ""
-        if re.search(r"^status:\s*[\"']", frontmatter_text, re.M):
-            errors.append(f"quoted status in {rel}")
     return errors
 
 
@@ -382,18 +376,15 @@ def check_base_dependency_metadata(root: Path, language: str) -> list[str]:
             if marker and marker not in {"true", "false"}:
                 errors.append(f"invalid project_entry boolean in {rel}: {marker}")
             if marker == "true":
-                missing = sorted(field for field in PROJECT_ENTRY_REQUIRED_FIELDS if not metadata.get(field))
+                missing = sorted(field for field in PROJECT_ENTRY_REQUIRED_FIELDS if (field not in metadata if field == "last_verified" else not metadata.get(field)))
                 if missing:
                     errors.append(f"project entry missing metadata in {rel}: {', '.join(missing)}")
                 if metadata.get("status") not in PROJECT_ENTRY_ALL_STATUSES:
                     errors.append(f"unsupported project entry status in {rel}: {metadata.get('status') or '-'}")
                 if metadata.get("priority") not in PROJECT_PRIORITY_VALUES:
                     errors.append(f"unsupported project entry priority in {rel}: {metadata.get('priority') or '-'}")
-                if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", metadata.get("last_verified", "")):
+                if metadata.get("last_verified") and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", metadata["last_verified"]):
                     errors.append(f"invalid project entry last_verified date in {rel}: {metadata.get('last_verified') or '-'}")
-                frontmatter_text = text[: text.find("\n---", 4)] if text.startswith("---\n") else ""
-                if re.search(r"^status:\s*[\"']", frontmatter_text, re.M):
-                    errors.append(f"quoted project entry status in {rel}")
             if (
                 metadata.get("type") in {"project-bridge", "codex-project-bridge"}
                 and metadata.get("status") in PROJECT_ENTRY_CURRENT_STATUSES
@@ -465,6 +456,22 @@ def health_check(args: argparse.Namespace) -> int:
                 print(f"  - {error}")
         else:
             print(f"PASS {name}")
+    if mode != "shared-core":
+        from .records import RECORD_LIMITS, record_findings
+        for path in iter_markdown_files(root):
+            if "templates" in path.parts or "模板" in path.parts:
+                continue
+            metadata, text = read_frontmatter(path)
+            if metadata.get("type") not in RECORD_LIMITS or metadata.get("status") in {"done", "archived", "historical"}:
+                continue
+            findings, warnings = record_findings(metadata, text)
+            for finding in findings:
+                print(f"FAIL compact record {path.relative_to(root)}: {finding}")
+            for warning in warnings:
+                print(f"WARN compact record {path.relative_to(root)}: {warning}")
+            failed = failed or bool(findings)
+            if metadata.get("type") in {"project-bridge", "codex-project-bridge"} and not metadata.get("last_verified"):
+                print(f"WARN project not fact-checked: {path.relative_to(root)}; keep last_verified empty until verification")
     return 1 if failed else 0
 
 
@@ -568,10 +575,10 @@ def build_stale_report(
             "",
             "## Recommended Next Action",
             "",
-            "1. For each bridge finding, update the bridge card `updated` field, current state, recent decisions, and next startup action.",
+            "1. For each bridge finding, verify current state against project sources, then replace only changed summary sections; set `last_verified` only after a fact check.",
             "2. For each Inbox warning, move or promote files that already have a destination.",
             "3. Before long work, tell the user which bridge card or Inbox folder needs maintenance.",
-            "4. Write a short handoff if this session changed project state.",
+            "4. Write a short handoff only when another window or agent needs to take over; follow write-back rules and run check-record.",
         ]
     )
     return "\n".join(lines) + "\n", finding_count

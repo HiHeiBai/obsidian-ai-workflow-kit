@@ -8,6 +8,7 @@ from .install import install_core, upgrade_core
 from .intake import intake_folder, intake_source
 from .migrate import migrate_ai_layout, migrate_codex_names, migrate_v09
 from .project import new_project
+from .records import check_record
 from .config import DEFAULT_INSTALL_MODE, VALID_LANGUAGES
 
 def build_parser() -> argparse.ArgumentParser:
@@ -19,6 +20,10 @@ def build_parser() -> argparse.ArgumentParser:
     health.add_argument("--vault", help="Vault root. Defaults to current directory.")
     health.add_argument("--mode", choices=["full", "barebone", "shared-core"], help="Required path set to check. Defaults to the installed kit mode.")
     health.set_defaults(func=health_check)
+
+    record = subparsers.add_parser("check-record", help="Check bridge/handoff size and current-action consistency without writing")
+    record.add_argument("paths", nargs="+", help="Bridge or handoff Markdown files to check")
+    record.set_defaults(func=check_record)
 
     new = subparsers.add_parser("new-project", help="Create a project workspace")
     new.add_argument("slug", help="Directory slug, for example my-project")

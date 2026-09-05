@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.11.1 - 2026-09-05
+
+- Replaced cumulative bridge and handoff templates with bounded current summaries, one primary action, and linked evidence.
+- Added read-only `check-record` validation and generator coverage; new projects leave factual verification dates empty until checked.
+- Removed automatic handoff prompts and accepted quoted YAML status strings.
+
 ## 0.11.0 - 2026-07-18
 
 - Added root `AGENTS.md` and `CLAUDE.md` entry points so Codex and Claude can discover the same task-first vault rules immediately after download.

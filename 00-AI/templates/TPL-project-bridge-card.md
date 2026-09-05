@@ -1,16 +1,19 @@
 ---
 type: template
 created: 2026-05-14
-updated: 2026-07-18
+updated: 2026-09-05
 status: active
 aliases: ["TPL-Codex项目桥接卡", "项目桥接卡模板", "Project Bridge Card Template"]
 ---
 
 # TPL｜项目桥接卡
 
+复制下列字段和章节建立卡片。规则见 `00-AI/governance/write-back-rules.md`；本卡保存当前摘要，逐项替换，不按日期追加。无状态、决策、边界、证据或下一步变化时不写。
+
 ```yaml
 ---
 type: project-bridge
+record_format: compact-v1
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 status: active # active / waiting / paused / blocked / done / archived
@@ -21,10 +24,10 @@ priority: p1 # p0 / p1 / p2 / p3
 stage: discovery
 local_root:
 kb_project:
-startup_files:
+startup_files: []
 kb_bridge_status: kb-only # kb-only / project-linked / paused
-last_verified:
-next_action:
+last_verified: # 实际核验后填写；创建或改写文档不等于核验
+next_action: # 必须与正文“首要动作”一致，只是该动作的字段镜像
 next_review:
 ---
 ```
@@ -33,76 +36,41 @@ next_review:
 
 ## 一句话定位
 
-这个本地项目对应知识库中的哪个项目区域，以及当前为什么需要 AI 接入。
+<项目做什么，为什么需要 AI 接手。>
 
-## 本地项目
+## 开工入口
 
-| 项目 | 内容 |
-|---|---|
-| 本地路径 | `<local_root>` |
-| Git 状态 | `<clean / dirty / unknown>` |
-| 项目规则 | `<local_root>/AGENTS.md` 或项目 README |
-| KB Bridge | `<已加入 / 待加入 / 不适用>` |
-| 关键文档 | `docs/...` |
+- 本地项目：`<local_root>`；规则：`<local_root>/AGENTS.md`（如存在）。
+- 知识库项目页：<项目页链接>。
+- 事实来源：<当前状态文档>、<决策文档>；与摘要矛盾时先复核事实源。
+- 当前任务需要的其它入口：<至多列必要文件，不复制文档目录>。
 
-## 知识库映射
+## 当前状态
 
-| 项目 | 内容 |
-|---|---|
-| 知识库项目页 | `<Obsidian 链接>` |
-| 开工必读 | `<START-HERE / 项目状态页 / 决策页>` |
-| 交接卡位置 | `01-Inbox/agent-handoffs/` |
+- <最多 5 点；只写当前结果、限制及核验来源，不累计每次进度。>
 
-## 开工必读
+## 有效决策
 
-1. 项目根 `AGENTS.md`（如果存在）
-2. `00-AI/START-HERE.md`
-3. 知识库项目页
-4. 项目 docs 中的当前任务文档
+- <最多 5 点；只保留仍约束行动的决策及原因，细节链接到决策文档。>
 
-## 项目记忆槽
+## 下一步
 
-写入原则：只写长期有效、之后会反复用到的信息；不保存完整聊天记录、流水账和敏感信息。事实和推断分开，旧信息过时时先标注“已过时”并说明原因。
+- 首要动作：<一个可执行动作，与 next_action 完全一致>
+- 必要依赖：<最多 2 项；没有则删除此行>
 
-### 当前状态
+## 阻塞与操作边界
 
-- `<YYYY-MM-DD｜来源任务｜项目现在处于什么状态，有什么已知限制>`
+- <未解决阻塞、授权范围及禁止动作；没有则写“无”。不得为压缩删除这些信息。>
 
-### 最近决策
+## 证据与经验入口
 
-- `<YYYY-MM-DD｜来源任务｜最近一次稳定决策，以及为什么这么定>`
+- <影响接手的关键验证结论及可定位证据；完整测试输出留在项目记录。>
+- <已沉淀经验链接；有复用经验写入 `20-SharedAssets/01-user-assets/`，不要写进 managed `02-modules/`。没有则删除。>
 
-### 下次开工
+## 维护约定
 
-- `<YYYY-MM-DD｜来源任务｜下次 AI agent 进入项目后第一件该做的事>`
-
-### 可沉淀经验
-
-- `<YYYY-MM-DD｜来源任务｜可复用经验 / 暂不沉淀及原因>`
-
-## 写回规则
-
-- 项目状态变化：更新知识库项目页和本桥接卡。
-- 重要实现 / 验收：更新项目 docs 或 PR；只有确实需要其它窗口或 Agent 接手时才写交接卡。
-- 可复用经验：写入 `20-SharedAssets/01-user-assets/` 或从该目录创建经验资产卡；不要把用户经验写进 managed `02-modules/`。
-- 重要、持续或跨项目任务结束时，至少检查本卡“当前状态 / 最近决策 / 下次开工 / 可沉淀经验”四项；有变化才更新。
-- 排队、跨会话或阻塞事项进入任务卡或项目页；只有需要其它窗口或 Agent 接手时才写交接卡。
-
-## 项目 AGENTS.md 最小入口
-
-```md
-## KB Bridge
-
-- 知识库入口：<你的知识库路径>/00-AI/START-HERE.md
-- 项目登记：<你的知识库路径>/<项目登记文件>.md
-- 项目桥接卡：<本卡路径>
-- 项目状态变化后更新项目桥接卡；需要其它窗口或 Agent 接手时再写知识库交接卡。
-```
-
-## 当前下一步
-
-- [ ] `<下一步动作>`
-
-## 验证记录
-
-- `<YYYY-MM-DD>`：`<验证内容>`
+- 正文不超过 3000 个 Unicode 字符且不超过 120 个非空行，移除文件开头 YAML frontmatter 后计量；不是字数或 Token。
+- 超限先把详细过程保存在既有项目日志、验收文档或可追溯历史，再在本卡引用；不得丢失未解决阻塞、操作授权边界或关键证据。仍不可压缩时，写明例外原因和复核条件。
+- 只替换当前段落；已失效内容保存在可追溯历史后移出摘要。正文只设一个“下一步”，不另加“下次开工”“当前下一步”或逐次“验证记录”。
+- 重要实现 / 验收写入项目 docs 或 PR；只有确实需要其它窗口或 Agent 接手时才写交接卡。
+- 更新后执行只读检查：`python3 00-AI/scripts/kb.py check-record <本卡路径>`。

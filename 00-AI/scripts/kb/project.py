@@ -39,12 +39,13 @@ Describe what this project is for and why an AI agent may need to resume it.
 - `current-state.md`
 - `decisions.md`
 
-## Next Action
+## Current Action
 
-- Define the next concrete action before starting work.
+Read the primary action in `{bridge_name}`; update it there when the plan changes.
 """,
         bridge_name: f"""---
 type: project-bridge
+record_format: compact-v1
 status: active
 project: {yaml_string(args.name)}
 pillar: {yaml_string(pillar)}
@@ -59,7 +60,7 @@ startup_files:
   - "10-Projects/{args.slug}/decisions.md"
 updated: {today}
 created: {today}
-last_verified: {today}
+last_verified:
 next_action: Define the next concrete project action.
 ---
 
@@ -78,24 +79,32 @@ Explain how this local project maps to the vault and why it matters.
 
 ## Current State
 
-- {today}: Initial bridge card created.
+- Initial bridge created; the actual project state has not been verified.
+- Keep at most 5 current facts, with source references. Replace changed facts.
 
-## Recent Decisions
+## Effective Decisions
 
-- No stable decisions recorded yet.
+- No stable decisions recorded yet. Keep at most 5 still-effective decisions.
 
-## Next Startup
+## Next Action
 
-- Read this bridge card and update `current-state.md` before changing project files.
+- Primary action: Define the next concrete project action.
+- Dependencies: At most 2 required dependencies; remove this line if none.
+
+## Blockers and Authorization Boundaries
+
+- Record unresolved blockers, existing permissions, and prohibited actions. None recorded yet.
+
+## Evidence and Lessons
+
+- Link critical verification conclusions to project records; state what remains unverified.
+- Put reusable lessons in `20-SharedAssets/01-user-assets/` and link them here.
 
 ## Write-back Rules
 
-| Content | Write Back To |
-|---|---|
-| Long-term project state | This bridge card or `current-state.md` |
-| Stable decisions | `decisions.md` |
-| Short handoff | `01-Inbox/agent-handoffs/` |
-| Reusable lesson | `20-SharedAssets/01-user-assets/` |
+- Replace changed current facts and keep the primary action equal to `next_action`; no change means no write. Put detailed history in existing project records and link it here.
+- Follow `00-AI/governance/write-back-rules.md` for budgets, evidence preservation, and conditional handoffs. Run `python3 00-AI/scripts/kb.py check-record <this-card.md>` after edits.
+
 """,
         "current-state.md": f"""---
 type: project-state
