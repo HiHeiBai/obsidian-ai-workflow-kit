@@ -21,3 +21,5 @@ This example shows how a filled project workspace can look after a few AI-assist
 Launch Notes is a small writing project. The owner uses Obsidian to keep product context, article decisions, source notes, and AI handoffs in one local vault.
 
 The goal is not to document everything. The goal is to leave enough stable context that a new AI session can resume without asking the same questions again.
+
+For a step-by-step fictional task, write-back, and lesson-reuse example, see [the walkthrough](../ai-handoff-demo/walkthrough.md).

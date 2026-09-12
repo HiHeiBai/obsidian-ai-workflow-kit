@@ -208,6 +208,8 @@ This is a `0.x` beta starter kit. It is ready for controlled trials, small vault
 
 This is a workflow kit, not an automation platform. If project state, decisions, handoffs, and reusable lessons are not maintained, the vault will slowly become ordinary folders again.
 
+[Task handoff and lesson reuse walkthrough](examples/ai-handoff-demo/walkthrough.md)
+
 ## License
 
 - Code, scripts, and executable snippets: [MIT](LICENSE).
@@ -216,4 +218,4 @@ This is a workflow kit, not an automation platform. If project state, decisions,
 
 ## Version
 
-Current version: `0.11.0`. See [CHANGELOG.md](CHANGELOG.md).
+Current version: `0.11.1`. See [CHANGELOG.md](CHANGELOG.md).

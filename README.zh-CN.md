@@ -189,6 +189,8 @@ English 安装使用英文路径。中文安装会把核心 vault 路径本地�
 
 这是一套 workflow kit，不是自动化平台。如果项目状态、决策、交接和经验长期不维护，它会慢慢退化成普通文件夹。
 
+[任务接手与经验复用完整示例](examples/ai-handoff-demo/walkthrough.md)
+
 ## License
 
 - 代码、脚本和可执行片段：[MIT](LICENSE)。
@@ -197,4 +199,4 @@ English 安装使用英文路径。中文安装会把核心 vault 路径本地�
 
 ## Version
 
-当前版本：`0.11.0`。见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`0.11.1`。见 [CHANGELOG.md](CHANGELOG.md)。

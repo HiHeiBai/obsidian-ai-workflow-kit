@@ -34,4 +34,4 @@ Ask for the missing facts before writing final copy.
 
 - If facts are confirmed, update this page.
 - If final copy is drafted, link it here.
-- If the session ends unfinished, create a handoff in `01-Inbox/agent-handoffs/`.
+- Only if another session or agent needs to take over, create a handoff in `01-Inbox/agent-handoffs/`.

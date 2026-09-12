@@ -29,6 +29,6 @@ status: active
 
 ## 结束写回
 
-如果任务完成，写交接卡到：
+项目事实变化时，先更新项目事实文档，再替换桥接卡当前摘要。无变化不写。只有确实需要另一个窗口或 Agent 接手时，才在 `01-Inbox/agent-handoffs/` 写临时交接卡。
 
-`01-Inbox/agent-handoffs/`
+完整过程见 [任务接手与经验复用示例](walkthrough.md)（含中文和 English）。

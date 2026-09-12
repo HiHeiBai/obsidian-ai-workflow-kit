@@ -1,10 +1,13 @@
 # Changelog
 
-## 0.11.1 - 2026-09-05
+## 0.11.1 - 2026-09-12
 
 - Replaced cumulative bridge and handoff templates with bounded current summaries, one primary action, and linked evidence.
 - Added read-only `check-record` validation and generator coverage; new projects leave factual verification dates empty until checked.
 - Removed automatic handoff prompts and accepted quoted YAML status strings.
+
+- Fixed localized stale checks and made unchanged managed upgrades preserve the manifest without timestamp churn.
+- Updated the handoff demo with a fictional end-to-end task and lesson-reuse walkthrough; handoffs are conditional on an actual transfer.
 
 ## 0.11.0 - 2026-07-18
 
