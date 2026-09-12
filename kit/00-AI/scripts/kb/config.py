@@ -1,20 +1,20 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 CORE_PATHS = [
     "AGENTS.md",
     "CLAUDE.md",
-    "install.sh",
     "index.md",
     "00-AI/START-HERE.md",
+    "00-AI/README.md",
     "00-AI/AGENTS.md",
     "00-AI/governance/README.md",
     "00-AI/governance/startup-contract.md",
     "00-AI/governance/write-back-rules.md",
     "00-AI/governance/review-gates.md",
     "00-AI/governance/maintenance-loop.md",
-    "CHANGELOG.md",
     "LICENSE",
     "VERSION",
     "docs/30-second-demo.md",
@@ -51,14 +51,11 @@ CORE_PATHS = [
 FULL_INSTALL_PATHS = [
     "AGENTS.md",
     "CLAUDE.md",
-    "README.md",
-    "README.zh-CN.md",
-    "install.sh",
     "index.md",
-    "CHANGELOG.md",
     "LICENSE",
     "VERSION",
     "00-AI/START-HERE.md",
+    "00-AI/README.md",
     "00-AI/AGENTS.md",
     "00-AI/governance",
     "00-AI/pipeline",
@@ -77,7 +74,20 @@ FULL_INSTALL_PATHS = [
     "examples/claude-code-hooks",
     "examples/filled-example",
     "examples/source-to-knowledge",
-    "docs",
+    "docs/30-second-demo.md",
+    "docs/30-second-demo.zh-CN.md",
+    "docs/10-minute-first-run.md",
+    "docs/10-minute-first-run.zh-CN.md",
+    "docs/automation.md",
+    "docs/automation.zh-CN.md",
+    "docs/concepts.md",
+    "docs/concepts.zh-CN.md",
+    "docs/templates.md",
+    "docs/templates.zh-CN.md",
+    "docs/before-after-case.md",
+    "docs/before-after-case.zh-CN.md",
+    "docs/migration.md",
+    "docs/legal",
 ]
 
 BAREBONE_INSTALL_PATHS = [
@@ -87,6 +97,7 @@ BAREBONE_INSTALL_PATHS = [
     "VERSION",
     "index.md",
     "00-AI/START-HERE.md",
+    "00-AI/README.md",
     "00-AI/AGENTS.md",
     "00-AI/governance",
     "00-AI/pipeline/README.md",
@@ -186,6 +197,8 @@ VALID_LANGUAGES = ("en", "zh-CN")
 DEFAULT_LANGUAGE = "en"
 DEFAULT_INSTALL_MODE = "barebone"
 ZH_CN_TARGET_RENAMES = [
+    ("00-AI/help", "90-系统/使用指南"),
+    ("00-AI/examples", "90-系统/示例"),
     ("00-AI/START-HERE.md", "00-入口/开始这里.md"),
     ("00-AI/AGENTS.md", "90-系统/AI协作规则.md"),
     ("00-AI/governance/maintenance-loop.md", "90-系统/规则/维护循环.md"),
@@ -242,7 +255,15 @@ ZH_CN_TARGET_RENAMES = [
     ("40-ExternalSources", "20-资料"),
     ("index.md", "首页.md"),
 ]
-LANGUAGE_TARGET_RENAMES = {"zh-CN": ZH_CN_TARGET_RENAMES}
+# Developer docs and demonstrations stay out of the user's working root.
+ZH_CN_TARGET_RENAMES.extend([
+    ("docs", "90-系统/使用指南"),
+    ("examples", "90-系统/示例"),
+])
+LANGUAGE_TARGET_RENAMES = {
+    "en": [("docs", "00-AI/help"), ("examples", "00-AI/examples")],
+    "zh-CN": ZH_CN_TARGET_RENAMES,
+}
 ZH_CN_TEXT_REFERENCE_REPLACEMENTS = [
     ("./metadata-minimum-standard-v1.md", "./元数据最小标准-v1.md"),
     ("metadata-minimum-standard-v1", "元数据最小标准-v1"),
@@ -387,11 +408,17 @@ def language_for_upgrade(args, manifest: dict) -> str:
     return validate_language(selected)
 
 
+def source_path(source_root: Path, relative) -> Path:
+    """Resolve a logical kit path without changing installed vault paths."""
+    bundled = source_root / "kit" / relative
+    return bundled if bundled.exists() else source_root / relative
+
+
 def language_source_path(source_root, language: str, relative):
-    localized = source_root / LANGUAGE_TEMPLATE_ROOT / language / relative
+    localized = source_path(source_root, LANGUAGE_TEMPLATE_ROOT) / language / relative
     if localized.exists():
         return localized
-    return source_root / relative
+    return source_path(source_root, relative)
 
 
 def language_target_path(language: str, relative) -> Path:
@@ -407,9 +434,24 @@ def language_target_path(language: str, relative) -> Path:
 
 def localize_text_references(text: str, language: str) -> str:
     selected = validate_language(language)
+    protected = []
+    def preserve_source(match):
+        protected.append(match.group(0))
+        return f"KITSOURCEPLACEHOLDER{len(protected)-1}END"
+    text = re.sub(r"(?:kit/|docs/release/|docs/superpowers/)[^\s`\"'<>)]*", preserve_source, text)
     replacements = sorted(LANGUAGE_TARGET_RENAMES.get(selected, []), key=lambda pair: len(pair[0]), reverse=True)
-    for source, target in replacements:
-        text = text.replace(source, target)
+    # Replace paths in one pass: an already expanded destination must not be
+    # expanded again (e.g. 00-AI/examples -> 00-AI/00-AI/examples).
+    mapping = dict(replacements)
+    patterns = [
+        (r"(?<![\w/-])" + re.escape(source) + r"(?=/)")
+        if source in {"docs", "examples"} else re.escape(source)
+        for source, _target in replacements
+    ]
+    if patterns:
+        text = re.sub("|".join(patterns), lambda match: mapping[match.group(0)], text)
     for source, target in LANGUAGE_TEXT_REFERENCE_REPLACEMENTS.get(selected, []):
         text = text.replace(source, target)
+    for index, value in enumerate(protected):
+        text = text.replace(f"KITSOURCEPLACEHOLDER{index}END", value)
     return text

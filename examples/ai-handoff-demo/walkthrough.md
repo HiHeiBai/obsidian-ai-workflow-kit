@@ -35,7 +35,7 @@ frontmatter `next_action` 与首要动作保持一致。`last_verified` 只填�
 
 ## 3. 沉淀：保存能再次使用的方法
 
-值得复用的经验是：“写产品更新前，先确认发布日期、具体变化、适用对象和已知限制。”使用[经验卡模板](../../00-AI/templates/TPL-question-knowledge-experience-asset-card.md)，在实际 vault 的 `20-SharedAssets/01-user-assets/` 保存，而不写入受管通用模块。
+值得复用的经验是：“写产品更新前，先确认发布日期、具体变化、适用对象和已知限制。”使用[经验卡模板](../../kit/00-AI/templates/TPL-question-knowledge-experience-asset-card.md)，在实际 vault 的 `20-SharedAssets/01-user-assets/` 保存，而不写入受管通用模块。
 
 经验卡应包含：触发场景是准备发布说明；方法是四项事实检查；依据链接到项目事实和审核记录；边界是检查清单不能替代产品核验或发布授权。这个案例只能提供候选方法，后续任务验证有效后再扩展适用范围。
 

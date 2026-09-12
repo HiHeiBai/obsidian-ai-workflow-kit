@@ -114,20 +114,20 @@ examples/source-to-knowledge/
 
 | 路径 | 作用 |
 |---|---|
-| [`00-AI/START-HERE.md`](../00-AI/START-HERE.md) | AI Agent 第一个应该读的文件 |
-| [`index.md`](../index.md) | 给人看的 vault 首页 |
-| [`00-AI/AGENTS.md`](../00-AI/AGENTS.md) | 给 Claude Code、Cursor、Codex 等 AI agent 的规则 |
-| [`00-AI/governance/`](../00-AI/governance/) | 开工契约、审查门、写回规则、维护循环 |
-| [`01-Inbox/`](../01-Inbox/) | 临时交接、排队或跨会话任务卡、网页剪藏入口 |
-| [`00-AI/pipeline/`](../00-AI/pipeline/) | AI 如何把本机资料整理成结构化知识 |
-| [`00-AI/recall/`](../00-AI/recall/) | 任务到上下文的召回地图和召回字段 |
-| [`00-AI/bases/`](../00-AI/bases/) | Full 模式安装的项目、任务和资料动态视图 |
-| [`10-Projects/`](../10-Projects/) | 项目工作区和项目桥接卡 |
-| [`20-SharedAssets/`](../20-SharedAssets/) | 可复用方法、SOP 和工作流 |
-| [`40-ExternalSources/`](../40-ExternalSources/) | 外部资料分析卡，不保存第三方全文 |
-| [`00-AI/templates/`](../00-AI/templates/) | 标准模板 |
-| [`docs/`](./) | 首次体验指南、架构图和面向使用者的说明文档 |
-| [`00-AI/scripts/`](../00-AI/scripts/) | 创建项目卡和巡检的轻量脚本 |
-| [`examples/`](../examples/) | 从开工到交接的完整示例 |
+| [`00-AI/START-HERE.md`](../kit/00-AI/START-HERE.md) | AI Agent 第一个应该读的文件 |
+| [`index.md`](../kit/index.md) | 给人看的 vault 首页 |
+| [`00-AI/AGENTS.md`](../kit/00-AI/AGENTS.md) | 给 Claude Code、Cursor、Codex 等 AI agent 的规则 |
+| [`00-AI/governance/`](../kit/00-AI/governance) | 开工契约、审查门、写回规则、维护循环 |
+| [`01-Inbox/`](../kit/01-Inbox) | 临时交接、排队或跨会话任务卡、网页剪藏入口 |
+| [`00-AI/pipeline/`](../kit/00-AI/pipeline) | AI 如何把本机资料整理成结构化知识 |
+| [`00-AI/recall/`](../kit/00-AI/recall) | 任务到上下文的召回地图和召回字段 |
+| [`00-AI/bases/`](../kit/00-AI/bases) | Full 模式安装的项目、任务和资料动态视图 |
+| [`10-Projects/`](../kit/10-Projects) | 项目工作区和项目桥接卡 |
+| [`20-SharedAssets/`](../kit/20-SharedAssets) | 可复用方法、SOP 和工作流 |
+| [`40-ExternalSources/`](../kit/40-ExternalSources) | 外部资料分析卡，不保存第三方全文 |
+| [`00-AI/templates/`](../kit/00-AI/templates) | 标准模板 |
+| [`docs/`](.) | 首次体验指南、架构图和面向使用者的说明文档 |
+| [`00-AI/scripts/`](../kit/00-AI/scripts) | 创建项目卡和巡检的轻量脚本 |
+| [`examples/`](../examples) | 从开工到交接的完整示例 |
 
 核心文件名已统一为英文，方便英文 AI Agent 按路径读取；页面标题和部分正文保留中文，用来保留原始工作方法。

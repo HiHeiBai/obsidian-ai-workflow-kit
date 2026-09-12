@@ -8,9 +8,9 @@ Use this checklist before switching the repository public or announcing a releas
 - [ ] `README.md` explains who this is for, who it is not for, and current maturity.
 - [ ] If the release promotes a pattern from a working vault, `docs/release/source-sync-policy.md` has been checked.
 - [ ] One-line installer has been tested from a clean environment.
-- [ ] `python3 00-AI/scripts/kb.py health-check` passes.
-- [ ] `bash 00-AI/scripts/test_install.sh` passes.
-- [ ] `bash 00-AI/scripts/test_tools.sh` passes.
+- [ ] `python3 kit/00-AI/scripts/kb.py health-check` passes.
+- [ ] `bash tests/test_install.sh` passes.
+- [ ] `bash tests/test_tools.sh` passes.
 - [ ] `python3 -m unittest discover -s tests` passes with no regression from the previous release.
 - [ ] English/zh-CN × barebone/full temporary installs all pass `health-check`.
 - [ ] A temporary full-mode install opens as an Obsidian vault, shows the startup entry, enables the built-in Bases plugin, and contains no community plugins.

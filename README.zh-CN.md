@@ -18,7 +18,7 @@
 
 ### 新建或安装到已有 vault
 
-推荐第一步：先把最小层安装进你自己的 vault。
+先把最小层安装到空目录或已有 vault，再用 Obsidian 打开**安装目标文件夹**，点击 `首页.md`。GitHub 仓库保存开发源码；安装器从中生成日常使用的知识库目录。
 
 安装器默认写入 English 路径和启动文本。中文用户请加 `--language zh-CN`，安装后的核心目录也会使用中文路径。
 
@@ -72,21 +72,21 @@ curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/m
 在公开仓库本地 clone 中先预览，再执行：
 
 ```bash
-python3 00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
-python3 00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
+python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
+python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
 ```
 
 目标 Vault 必须在 `.obsidian-ai-workflow-kit/adoption-policy.json` 中明确只允许 `shared-core`。详细边界见 [Source Sync Policy](docs/release/source-sync-policy.md)。
 
 ### 30 秒演示
 
-安装到自己的 vault 前，可以先看只读演示：
+先安装一个独立的演示库，体验后再用于自己的笔记：
 
-1. 下载或克隆这个仓库。
-2. 在 Obsidian 里选择 **Open folder as vault**，选中这个仓库目录。vault 本质上就是一个本地 Markdown 文件夹。
-3. 使用 [30 秒演示](docs/30-second-demo.zh-CN.md) 里的提示词。
+1. 按 [30 秒演示](docs/30-second-demo.zh-CN.md) 将 full 模式安装到新的测试文件夹。
+2. 在 Obsidian 里选择 **Open folder as vault**，选中安装目标文件夹。
+3. 打开 `首页.md`，再把演示提示词发给 AI Agent。
 
-这个演示会让 AI 读取开工入口，找到已填好的项目桥接卡，并回答当前状态、最新决策和下一步动作。不需要 Obsidian 社区插件。
+安装完成后，AI 会用只读方式读取已填好的项目桥接卡，回答当前状态、最新决策和下一步动作。不需要 Obsidian 社区插件。
 
 ## 你会得到什么
 
@@ -127,7 +127,7 @@ AI 默认不应该扫描整个 vault。它应该先读开工入口，再按任�
 | 模式 | 适合场景 | 会安装什么 |
 |---|---|---|
 | `barebone` | 给已有 vault 加一个最小入口 | 开工入口、核心工作目录、治理规则、项目登记、模板、`90-系统/脚本/kb.py` |
-| `full` | 新建完整 starter vault | 全部工作流目录、示例、文档、模板、脚本和 Bases 动态视图 |
+| `full` | 新建完整 starter vault | 核心工作流、模板、脚本、Bases 动态视图，以及 `90-系统/使用指南/` 和 `90-系统/示例/` |
 | `shared-core` | 让长期工作库跟随公开核心 | 通用规则、资料流程、召回、模板、Bases、脚本和标准；不包含入口、项目、Inbox、归档和根目录文件 |
 
 如果你不想用远程 `curl` 安装，可以本地克隆后运行：
@@ -162,26 +162,52 @@ bash install.sh --language zh-CN "/path/to/your-vault"
 - [迁移指南](docs/migration.md)
 - [核心概念](docs/concepts.zh-CN.md)
 - [模板说明](docs/templates.zh-CN.md)
-- [脚本说明](00-AI/scripts/README.md)
+- [脚本说明](kit/00-AI/scripts/README.md)
 - [v0.9.1 发布说明](docs/release/v0.9.1-release-notes.md)
 
-## 仓库结构
+## 安装后的知识库
+
+中文安装的日常目录如下：
 
 ```text
-00-入口/开始这里.md          AI 开工入口
-01-收件箱/                  临时流转区
-10-项目/                    项目工作区和项目桥接卡
+首页.md                    人从这里开始
+00-入口/开始这里.md          AI 从这里开工
+01-收件箱/                  临时资料、待办和交接
+10-项目/                    项目笔记与项目桥接卡
 20-资料/                    外部资料和本机资料处理流程
 30-经验资产/                可复用方法和经验
-90-系统/规则/               写回、审查和维护规则
-90-系统/召回/               任务到上下文的召回地图
-90-系统/视图/               项目、任务、资料动态视图（仅 full）
-90-系统/模板/               可复用笔记模板
-90-系统/脚本/               可选辅助脚本
-90-系统/配置/               配置文件
+90-系统/                    规则、召回、视图、模板、脚本和配置
+  使用指南/                 日常使用说明（仅 full）
+  示例/                     工作流参考示例（仅 full）
 ```
 
-English 安装使用英文路径。中文安装会把核心 vault 路径本地化，例如 `00-入口/开始这里.md`、`10-项目/`、`30-经验资产/`。
+日常先看首页，再按任务进入项目、资料或经验资产。系统规则和参考说明集中在 `90-系统/`，不用逐个浏览才能开始。
+
+根目录另外保留 `AGENTS.md`、`CLAUDE.md` 供 AI 自动发现入口，以及 `LICENSE`、`VERSION` 记录授权和版本。隐藏目录 `.obsidian-ai-workflow-kit/` 保存更新清单。
+
+English 安装沿用英文目录，详见 [English guide](README.md)。
+
+## GitHub 源码目录
+
+仓库按维护职责组织，供开发和贡献使用：
+
+```text
+kit/                       可安装的知识库模板与运行脚本
+  00-AI/                   规则、模板、多语言版本和 CLI
+  01-Inbox/                收件箱初始内容
+  10-Projects/             项目初始内容
+  20-SharedAssets/          经验资产初始内容
+  40-ExternalSources/      资料初始内容
+  index.md                 安装后首页的源文件
+  AGENTS.md / CLAUDE.md    安装后 AI 入口的源文件
+docs/                      使用文档和开发记录
+examples/                  full 安装选用的示例源文件
+assets/                    仓库展示素材
+tests/                     开发测试
+install.sh                 安装入口
+```
+
+在仓库目录运行 `bash install.sh --language zh-CN "/path/to/your-vault"`，然后用 Obsidian 打开目标目录。full 模式只安装选定的使用说明与示例，仓库 README、安装器、更新日志、发布清单和研发计划留在源码仓库。
 
 ## 成熟度
 
@@ -199,4 +225,4 @@ English 安装使用英文路径。中文安装会把核心 vault 路径本地�
 
 ## Version
 
-当前版本：`0.11.1`。见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`0.12.0`。见 [CHANGELOG.md](CHANGELOG.md)。

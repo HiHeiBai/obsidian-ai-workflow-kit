@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -19,17 +21,17 @@ jobs:
 
       - name: Check script syntax
         run: |
-          python3 -m py_compile 00-AI/scripts/kb.py 00-AI/scripts/kb/*.py examples/claude-code-hooks/stop-session-check.py
-          bash -n install.sh 00-AI/scripts/test_install.sh 00-AI/scripts/test_tools.sh
+          python3 -m py_compile kit/00-AI/scripts/kb.py kit/00-AI/scripts/kb/*.py examples/claude-code-hooks/stop-session-check.py
+          bash -n install.sh tests/test_install.sh tests/test_tools.sh
 
       - name: Run kit health check
-        run: python3 00-AI/scripts/kb.py health-check
+        run: python3 kit/00-AI/scripts/kb.py health-check
 
       - name: Run Python unit tests
         run: python3 -m unittest discover -s tests
 
       - name: Run installer tests
-        run: bash 00-AI/scripts/test_install.sh
+        run: bash tests/test_install.sh
 
       - name: Run tool tests
-        run: bash 00-AI/scripts/test_tools.sh
+        run: bash tests/test_tools.sh

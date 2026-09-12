@@ -114,20 +114,20 @@ If you already have an Obsidian vault, start with [Migration Guide](migration.md
 
 | Path | Purpose |
 |---|---|
-| [`00-AI/START-HERE.md`](../00-AI/START-HERE.md) | The first file an AI agent should read |
-| [`index.md`](../index.md) | Human-facing vault homepage |
-| [`00-AI/AGENTS.md`](../00-AI/AGENTS.md) | Rules for AI agents such as Claude Code, Cursor, and Codex |
-| [`00-AI/governance/`](../00-AI/governance/) | Startup contract, review gates, write-back rules, maintenance loop |
-| [`01-Inbox/`](../01-Inbox/) | Temporary handoffs, queued/cross-session task cards, and web clips |
-| [`00-AI/pipeline/`](../00-AI/pipeline/) | How AI turns local materials into structured knowledge |
-| [`00-AI/recall/`](../00-AI/recall/) | Task-to-context maps and recall fields |
-| [`00-AI/bases/`](../00-AI/bases/) | Optional project, task, and source views installed in full mode |
-| [`10-Projects/`](../10-Projects/) | Project workspaces and bridge cards |
-| [`20-SharedAssets/`](../20-SharedAssets/) | Reusable methods, SOPs, and workflows |
-| [`40-ExternalSources/`](../40-ExternalSources/) | Source analysis cards, not copied third-party articles |
-| [`00-AI/templates/`](../00-AI/templates/) | Standard templates |
-| [`docs/`](./) | First-run guides, diagrams, and user-facing walkthroughs |
-| [`00-AI/scripts/`](../00-AI/scripts/) | Small helper scripts for project cards and health checks |
-| [`examples/`](../examples/) | End-to-end handoff demo |
+| [`00-AI/START-HERE.md`](../kit/00-AI/START-HERE.md) | The first file an AI agent should read |
+| [`index.md`](../kit/index.md) | Human-facing vault homepage |
+| [`00-AI/AGENTS.md`](../kit/00-AI/AGENTS.md) | Rules for AI agents such as Claude Code, Cursor, and Codex |
+| [`00-AI/governance/`](../kit/00-AI/governance) | Startup contract, review gates, write-back rules, maintenance loop |
+| [`01-Inbox/`](../kit/01-Inbox) | Temporary handoffs, queued/cross-session task cards, and web clips |
+| [`00-AI/pipeline/`](../kit/00-AI/pipeline) | How AI turns local materials into structured knowledge |
+| [`00-AI/recall/`](../kit/00-AI/recall) | Task-to-context maps and recall fields |
+| [`00-AI/bases/`](../kit/00-AI/bases) | Optional project, task, and source views installed in full mode |
+| [`10-Projects/`](../kit/10-Projects) | Project workspaces and bridge cards |
+| [`20-SharedAssets/`](../kit/20-SharedAssets) | Reusable methods, SOPs, and workflows |
+| [`40-ExternalSources/`](../kit/40-ExternalSources) | Source analysis cards, not copied third-party articles |
+| [`00-AI/templates/`](../kit/00-AI/templates) | Standard templates |
+| [`docs/`](.) | First-run guides, diagrams, and user-facing walkthroughs |
+| [`00-AI/scripts/`](../kit/00-AI/scripts) | Small helper scripts for project cards and health checks |
+| [`examples/`](../examples) | End-to-end handoff demo |
 
 Core filenames are English for agent readability. Some page titles and template body text still include Chinese because they preserve the original working method; this does not affect how the workflow runs.

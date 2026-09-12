@@ -2,6 +2,14 @@
 
 Use this kit gradually. Do not rebuild an existing Obsidian vault.
 
+## Upgrading to v0.12: source and vault layout
+
+The GitHub repository now keeps installable templates in `kit/`. Run the installer from the repository root; the installed CLI keeps its existing path. Re-run `install.sh --update` from the new repository (or use the remote installer), retaining your existing mode and language, and preview with `--dry-run` first.
+
+A new full installation has one home page and working directories. User guides and examples are inside the system directory: `00-AI/help` and `00-AI/examples` in English, or `90-系统/使用指南` and `90-系统/示例` in Chinese. Repository READMEs, installer, changelog, release checklists, and development plans are no longer installed. Root agent pointers, license, and version remain.
+
+Managed upgrades remove retired kit files only when they still match their recorded hashes. Modified old guides/examples and untracked user notes stay in place and are reported for review; this can leave old directories present. Review those documents before moving them yourself. Empty retired directories are removed. The updater does not rewrite private note links to moved documents, so review links from your own notes if they referenced the old `docs/` or `examples/` paths. Shared-core installations keep their ownership boundary and do not adopt the new homepage or user directories.
+
 ## Upgrading From v0.8 To v0.9
 
 The v0.9 upgrade has two separate steps so kit files and user-owned notes are never treated the same.

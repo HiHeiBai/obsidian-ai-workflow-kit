@@ -24,7 +24,7 @@ It is a file-system-level workflow, not an app, community plugin, cloud memory s
 
 ### New or existing vault
 
-Recommended first step: install the minimal layer into your own vault.
+Install the minimal layer into an empty folder or your existing vault. Open the **installation target folder** in Obsidian, then open `index.md` for the human-facing home page. The GitHub repository contains development resources; the installer builds your working vault from them.
 
 The installer writes English paths and starter text by default. Use `--language zh-CN` for Chinese paths and starter text.
 
@@ -86,21 +86,21 @@ Use `shared-core` when the vault already has its own entry, projects, Inbox, arc
 From a local clone of this repository, preview and then apply:
 
 ```bash
-python3 00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
-python3 00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
+python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
+python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
 ```
 
 The target vault must explicitly allow only `shared-core` in `.obsidian-ai-workflow-kit/adoption-policy.json`. See [Source Sync Policy](docs/release/source-sync-policy.md).
 
 ### See the handoff in 30 seconds
 
-Try the read-only demo before installing anything:
+Install a separate demo vault to try the workflow before using your own notes:
 
-1. Download or clone this repository.
-2. In Obsidian, choose **Open folder as vault** and select the repository folder. A vault is just a local Markdown folder.
-3. Send the prompt in [30-Second Demo](docs/30-second-demo.md).
+1. Follow [30-Second Demo](docs/30-second-demo.md) to install full mode into a new test folder.
+2. In Obsidian, choose **Open folder as vault** and select that installation target.
+3. Open `index.md`, then send the demo prompt to your AI agent.
 
-The demo shows an AI agent reading the startup entry, finding a filled project bridge card, and reporting current state, latest decision, and next action. No Obsidian community plugins are required.
+After setup, the read-only demo shows current state, the latest decision, and the next action from a filled project bridge card. No Obsidian community plugins are required.
 
 ## What gets installed
 
@@ -115,7 +115,7 @@ The demo shows an AI agent reading the startup entry, finding a filled project b
 | Metadata silently drops pages from views | typed status, `project_entry`, and Base-field health checks |
 | The vault slowly gets messy | read-only link, metadata, and maintenance checks |
 
-The minimal layer is deliberately small: it gives an agent a reliable entry, a project-aware route, and clear write-back rules. Add the pipeline, recall system, dashboards, examples, and templates only when the vault needs them.
+The default mode includes the core workflow and templates. Full mode adds dashboards, examples, and selected user guides. Its guides live under `00-AI/help/` and examples under `00-AI/examples/`; development plans and release checklists stay in the source repository.
 
 ## How the routing works
 
@@ -143,7 +143,7 @@ The default install is the minimal starter template. Advanced users can pass `--
 | Mode | Best for | What it installs |
 |---|---|---|
 | `barebone` | First step inside an existing vault | startup entry, core workflow folders, governance, project registry, templates, `00-AI/scripts/kb.py` |
-| `full` | New complete starter vault | all workflow folders, examples, docs, templates, scripts, and built-in Bases views |
+| `full` | New complete starter vault | core workflow plus templates, scripts, Bases views, user guides in `00-AI/help/`, and examples in `00-AI/examples/` |
 | `shared-core` | Keep an established working vault aligned | reusable rules, pipeline, recall, templates, Bases, scripts, and standards; no entry, projects, Inbox, archives, or root files |
 
 Security-sensitive users can skip the remote `curl` form and run the installer from a local clone:
@@ -179,28 +179,50 @@ Not a good fit:
 - [Migration Guide](docs/migration.md)
 - [Concepts](docs/concepts.md)
 - [Templates](docs/templates.md)
-- [Scripts](00-AI/scripts/README.md)
+- [Scripts](kit/00-AI/scripts/README.md)
 - [v0.9.1 Release Notes](docs/release/v0.9.1-release-notes.md)
 
-## Repository layout
+## Your installed vault
+
+English installations have this working layout:
 
 ```text
-00-AI/START-HERE.md              AI startup entry
-00-AI/governance/       write-back, review, and maintenance rules
-00-AI/pipeline/     local material intake and promotion
-00-AI/recall/          task-to-context maps and recall fields
-00-AI/bases/           optional built-in Bases dashboards (full mode)
-01-Inbox/tasks/        queued, cross-session, or blocked local tasks
-10-Projects/               project workspaces and bridge cards
+index.md                   start here as a person
+00-AI/                     AI entry, rules, recall, templates, and scripts
+  START-HERE.md            start here as an AI agent
+  help/                    user guides (full mode)
+  examples/                reference examples (full mode)
+01-Inbox/                  temporary material and pending work
+10-Projects/               project notes and bridge cards
 20-SharedAssets/           reusable methods and lessons
 40-ExternalSources/        source analysis cards
-00-AI/templates/              reusable note templates
-docs/                      guides, diagrams, and walkthroughs
-00-AI/scripts/                   optional helper scripts
-examples/                  demo project and source workflows
 ```
 
-English installs use English paths. Chinese installs localize the core vault paths; see [README.zh-CN.md](README.zh-CN.md) for the exact path names.
+Root-level `AGENTS.md` and `CLAUDE.md` point agents to the startup entry. `LICENSE` and `VERSION` retain package information, and a hidden `.obsidian-ai-workflow-kit/` directory records managed files for updates.
+
+Chinese installations use localized folder and home-page names. See [the Chinese guide](README.zh-CN.md).
+
+## Source repository
+
+For contributors, the GitHub checkout is organized separately:
+
+```text
+kit/                       installable vault templates and runtime scripts
+  00-AI/                   rules, templates, language variants, and CLI
+  01-Inbox/                Inbox starter files
+  10-Projects/             project starter files
+  20-SharedAssets/          reusable asset starter files
+  40-ExternalSources/      source starter files
+  index.md                 installed home-page source
+  AGENTS.md / CLAUDE.md    installed agent-entry sources
+docs/                      documentation and contributor records
+examples/                  source examples selected by full installation
+assets/                    repository presentation assets
+tests/                     development tests
+install.sh                 installer entry point
+```
+
+Run `bash install.sh "/path/to/your-vault"` from this checkout, then open the target folder in Obsidian. Installing full mode does not copy repository READMEs, the installer, changelog, or top-level development directories into your vault.
 
 ## Maturity
 
@@ -218,4 +240,4 @@ This is a workflow kit, not an automation platform. If project state, decisions,
 
 ## Version
 
-Current version: `0.11.1`. See [CHANGELOG.md](CHANGELOG.md).
+Current version: `0.12.0`. See [CHANGELOG.md](CHANGELOG.md).

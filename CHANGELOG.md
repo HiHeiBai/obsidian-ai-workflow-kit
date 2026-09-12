@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.0 - 2026-09-12
+
+- Separated installable templates and runtime into `kit/`, keeping developer tests and documentation outside the vault source.
+- Cleaned full installations: one home page, functional working areas, and guides/examples inside the system directory; repository READMEs, installer, changelog, release checklists, and development plans are excluded.
+- Replaced technical home indexes with clickable task navigation that works in both minimal and full installs.
+- Preserved installed CLI paths and shared-core ownership; upgrades retain modified retired files and remove only unchanged managed files and empty directories.
+
 ## 0.11.1 - 2026-09-12
 
 - Replaced cumulative bridge and handoff templates with bounded current summaries, one primary action, and linked evidence.

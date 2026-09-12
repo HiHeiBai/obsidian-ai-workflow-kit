@@ -4,6 +4,9 @@ import argparse
 import datetime as dt
 import hashlib
 import json
+import os
+import re
+import urllib.parse
 from pathlib import Path
 
 from .config import (
@@ -13,6 +16,7 @@ from .config import (
     MANIFEST_FILE,
     MANIFEST_SCHEMA,
     SKIP_INSTALL_PARTS,
+    source_path,
     install_paths_for_mode,
     language_for_install,
     language_for_upgrade,
@@ -148,7 +152,7 @@ def record_managed_file(manifest: dict, relative: Path, source_hash: str) -> Non
 
 
 def iter_install_files(source_root: Path, rel: str, language: str):
-    source = source_root / rel
+    source = source_path(source_root, rel)
     if not source.exists():
         return
     if source.is_file():
@@ -162,7 +166,7 @@ def iter_install_files(source_root: Path, rel: str, language: str):
             continue
         if path.name in {".DS_Store"} or path.suffix == ".pyc":
             continue
-        relative = path.relative_to(source_root)
+        relative = Path(rel) / path.relative_to(source)
         yield language_source_path(source_root, language, relative), language_target_path(language, relative)
 
 
@@ -174,6 +178,43 @@ def rendered_install_bytes(source: Path, language: str) -> bytes:
         text = raw.decode("utf-8")
     except UnicodeDecodeError:
         return raw
+    if source.suffix == ".md":
+        root = repo_root()
+        def logical(path):
+            rel = path.relative_to(root).as_posix()
+            if rel.startswith("kit/"):
+                rel = rel[4:]
+            prefix = f"00-AI/i18n/{language}/"
+            return rel[len(prefix):] if rel.startswith(prefix) else rel
+        try:
+            destination = language_target_path(language, logical(source))
+        except ValueError:
+            return localize_text_references(text, language).encode("utf-8")
+        placeholders = []
+        def rewrite(match):
+            url = match.group(2)
+            if url.startswith(("http://", "https://", "mailto:", "#")):
+                return match.group(0)
+            target, separator, anchor = url.partition("#")
+            resolved = (source.parent / urllib.parse.unquote(target)).resolve()
+            try:
+                rel = logical(resolved)
+            except ValueError:
+                return match.group(0)
+            mapped = language_target_path(language, rel)
+            # A repository-only reference remains available online.
+            if rel in {"README.md", "README.zh-CN.md", "install.sh", "CHANGELOG.md"} or rel.startswith(("docs/release/", "docs/superpowers/", "assets/")):
+                rewritten = "https://github.com/HiHeiBai/obsidian-ai-workflow-kit/blob/main/" + rel
+            else:
+                rewritten = os.path.relpath(mapped, destination.parent).replace(os.sep, "/")
+            rewritten += separator + anchor if separator else ""
+            placeholders.append(match.group(1) + rewritten + ")")
+            return f"KITLINKPLACEHOLDER{len(placeholders)-1}END"
+        text = re.sub(r"(\[[^\]]*\]\()([^)]+)\)", rewrite, text)
+        text = localize_text_references(text, language)
+        for index, link in enumerate(placeholders):
+            text = text.replace(f"KITLINKPLACEHOLDER{index}END", link)
+        return text.encode("utf-8")
     return localize_text_references(text, language).encode("utf-8")
 
 
@@ -340,6 +381,14 @@ def upgrade_core(args: argparse.Namespace) -> int:
                     print(f"would remove retired {display}")
                 else:
                     target.unlink()
+                    # Remove only empty folders left by retired managed files.
+                    parent = target.parent
+                    while parent != target_root:
+                        try:
+                            parent.rmdir()
+                        except OSError:
+                            break
+                        parent = parent.parent
                     print(f"removed retired {display}")
                 managed_files.pop(display, None)
                 continue

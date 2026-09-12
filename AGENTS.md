@@ -1,5 +1,9 @@
-# Vault Agent Entry
+# Repository Agent Entry
 
-Read `00-AI/START-HERE.md` before working in this Obsidian vault. Load only the project bridge, governance rule, or template required by the current task.
+This is the source repository, not an installed Obsidian vault.
 
-Do not treat this pointer as a second rule source. The maintained workflow lives under `00-AI/`.
+- Installable vault templates and runtime: `kit/`.
+- Read `kit/00-AI/AGENTS.md` for workflow rules and `docs/release/source-sync-policy.md` for ownership boundaries. Paths in vault rules are relative to the installed vault.
+- Run source commands with `python3 kit/00-AI/scripts/kb.py`.
+- Verify changes with the CI commands in `.github/workflows/ci.yml`, including both languages and install modes.
+- Keep repository-only documentation, tests, and installation tooling out of installed vaults.

@@ -9,6 +9,8 @@ from pathlib import Path
 
 from .config import (
     AUDIT_REPORT_DIR,
+    CORE_PATHS,
+    source_path,
     DEFAULT_STALE_PATTERNS_FILE,
     EXTERNAL_BASE_TYPES,
     LOCAL_TASK_REQUIRED_FIELDS,
@@ -52,7 +54,7 @@ def load_stale_patterns(root: Path) -> list[str]:
     if override.exists():
         return read_stale_pattern_file(override)
     language = detect_vault_language(root)
-    return read_stale_pattern_file(root / language_target_path(language, DEFAULT_STALE_PATTERNS_FILE))
+    return read_stale_pattern_file(source_path(root, language_target_path(language, DEFAULT_STALE_PATTERNS_FILE)))
 
 
 def detect_vault_language(root: Path) -> str:
@@ -90,8 +92,9 @@ def detect_vault_mode(root: Path) -> str:
 def check_required_paths(root: Path, mode: str = "full", language: str | None = None) -> list[str]:
     selected_language = language or detect_vault_language(root)
     errors = []
-    for rel in required_paths_for_mode(mode, selected_language):
-        if not (root / rel).exists():
+    paths = CORE_PATHS if (root / "kit/00-AI").is_dir() else required_paths_for_mode(mode, selected_language)
+    for rel in paths:
+        if not source_path(root, rel).exists():
             errors.append(f"missing required path: {rel}")
     return errors
 
@@ -193,6 +196,11 @@ def check_markdown_links(root: Path) -> list[str]:
             if not str(resolved).startswith(str(root)):
                 errors.append(f"link escapes vault: {path.relative_to(root)} -> {target}")
             elif not resolved.exists():
+                # Localized home templates use virtual vault-relative links.
+                relative = resolved.relative_to(root).as_posix()
+                localized = re.match(r"kit/00-AI/i18n/(?:en|zh-CN)/(.+)", relative)
+                if localized and source_path(root, localized.group(1)).exists():
+                    continue
                 errors.append(f"broken link: {path.relative_to(root)} -> {target}")
     return errors
 
@@ -329,7 +337,7 @@ def check_base_files(root: Path, mode: str, language: str) -> list[str]:
     }
     for source_rel, markers in specs.items():
         rel = language_target_path(language, source_rel)
-        path = root / rel
+        path = source_path(root, rel)
         if not path.exists():
             errors.append(f"missing Base file: {rel.as_posix()}")
             continue
@@ -360,14 +368,14 @@ def health_checks_for_mode(root: Path, mode: str, language: str) -> list[tuple[s
     ]
     if not (root / MANIFEST_DIR / MANIFEST_FILE).exists():
         checks.append(("private user paths", check_private_user_paths(root)))
-    if mode == "full" and language == "en":
+    if mode == "full" and language == "en" and (root / "kit/00-AI").is_dir():
         checks.append(("english README", check_english_readme(root)))
     return checks
 
 
 def check_base_dependency_metadata(root: Path, language: str) -> list[str]:
     errors: list[str] = []
-    projects_root = root / language_target_path(language, "10-Projects")
+    projects_root = source_path(root, language_target_path(language, "10-Projects"))
     if projects_root.exists():
         for path in projects_root.rglob("*.md"):
             metadata, text = read_frontmatter(path)

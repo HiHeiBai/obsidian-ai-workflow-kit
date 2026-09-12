@@ -2,6 +2,8 @@
 
 These scripts are optional. The vault works without them.
 
+For everyday commands below, run from the installed vault root. To install or upgrade a vault, use the repository root and `python3 kit/00-AI/scripts/kb.py`, or the one-line installer. The repository source layout is separate from the installed vault layout.
+
 ## One-line Install
 
 ```bash
@@ -44,7 +46,7 @@ Default behavior:
 Use `--conflict-copy` with `upgrade-core` when you want new versions written beside conflicted files for manual comparison:
 
 ```bash
-python3 00-AI/scripts/kb.py upgrade-core "/path/to/your-vault" --mode barebone --conflict-copy
+python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/your-vault" --mode barebone --conflict-copy
 ```
 
 ## Local Adapter Protection
@@ -179,11 +181,11 @@ It performs a preflight before writing. If a destination task file already exist
 ## Install Core
 
 ```bash
-python3 00-AI/scripts/kb.py install-core "/path/to/your-vault" --dry-run
-python3 00-AI/scripts/kb.py install-core "/path/to/your-vault"
-python3 00-AI/scripts/kb.py install-core "/path/to/your-vault" --mode barebone --dry-run
-python3 00-AI/scripts/kb.py install-core "/path/to/your-vault" --mode barebone
-python3 00-AI/scripts/kb.py install-core "/path/to/your-vault" --language zh-CN --mode barebone
+python3 kit/00-AI/scripts/kb.py install-core "/path/to/your-vault" --dry-run
+python3 kit/00-AI/scripts/kb.py install-core "/path/to/your-vault"
+python3 kit/00-AI/scripts/kb.py install-core "/path/to/your-vault" --mode barebone --dry-run
+python3 kit/00-AI/scripts/kb.py install-core "/path/to/your-vault" --mode barebone
+python3 kit/00-AI/scripts/kb.py install-core "/path/to/your-vault" --language zh-CN --mode barebone
 bash install.sh --dry-run "/path/to/your-vault"
 bash install.sh "/path/to/your-vault"
 bash install.sh --mode barebone --dry-run "/path/to/your-vault"
@@ -204,8 +206,8 @@ Default behavior:
 ## Upgrade Core
 
 ```bash
-python3 00-AI/scripts/kb.py upgrade-core "/path/to/your-vault" --mode barebone --dry-run
-python3 00-AI/scripts/kb.py upgrade-core "/path/to/your-vault" --mode barebone
+python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/your-vault" --mode barebone --dry-run
+python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/your-vault" --mode barebone
 ```
 
 Use this when a vault already has the kit and you want to follow newer GitHub versions without replacing user-owned notes. It only updates files that are managed by the kit and still match the last installed checksum.

@@ -87,6 +87,8 @@ def write_file(path: Path, content: str, dry_run: bool) -> None:
 def repo_root() -> Path:
     current = Path(__file__).resolve()
     for parent in current.parents:
+        if (parent / MANIFEST_DIR / MANIFEST_FILE).exists():
+            return parent
         if (parent / "VERSION").exists() and (parent / "README.md").exists():
             return parent
     return current.parents[2]

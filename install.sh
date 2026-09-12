@@ -16,10 +16,10 @@ TMP_DIR=""
 
 usage() {
   cat <<'USAGE'
-Install Obsidian AI Workflow Kit into an existing Obsidian vault.
+Install Obsidian AI Workflow Kit into a new or existing Obsidian vault.
 
 Usage:
-  bash install.sh [--dry-run] [--overwrite] [--update] [--allow-protected-adapter-write] [--language en|zh-CN] [--branch main] [--source /path/to/repo] <vault-path>
+  bash install.sh [--dry-run] [--overwrite] [--update] [--allow-protected-adapter-write] [--language en|zh-CN] [--mode barebone|full|shared-core] [--branch main] [--source /path/to/repo] <vault-path>
 
 Examples:
   bash install.sh --dry-run "/path/to/your-vault"
@@ -144,7 +144,7 @@ fi
 
 if [[ -z "$SOURCE" && -n "${BASH_SOURCE[0]:-}" && -f "${BASH_SOURCE[0]}" ]]; then
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  if [[ -f "$SCRIPT_DIR/00-AI/scripts/kb.py" ]]; then
+  if [[ -f "$SCRIPT_DIR/kit/00-AI/scripts/kb.py" ]]; then
     SOURCE="$SCRIPT_DIR"
   fi
 fi
@@ -167,7 +167,7 @@ if [[ -z "$SOURCE" ]]; then
   tar -xzf "$ARCHIVE" -C "$SOURCE" --strip-components=1
 fi
 
-if [[ ! -f "$SOURCE/00-AI/scripts/kb.py" ]]; then
+if [[ ! -f "$SOURCE/kit/00-AI/scripts/kb.py" ]]; then
   echo "invalid kit source: $SOURCE" >&2
   exit 1
 fi
@@ -190,21 +190,37 @@ if [[ "$ALLOW_PROTECTED_ADAPTER_WRITE" -eq 1 ]]; then
   ARGS+=(--allow-protected-adapter-write)
 fi
 
-python3 "$SOURCE/00-AI/scripts/kb.py" "$COMMAND" "$TARGET" "${ARGS[@]}"
+python3 "$SOURCE/kit/00-AI/scripts/kb.py" "$COMMAND" "$TARGET" "${ARGS[@]}"
 
 if [[ "$DRY_RUN" -eq 0 ]]; then
   if [[ "$LANGUAGE" == "zh-CN" ]]; then
     HELPER_PATH="90-系统/脚本/kb.py"
     START_PATH="00-入口/开始这里.md"
+    HOME_PATH="首页.md"
     AGENT_PROMPT="你是知识库维护 Agent。请读取当前 vault 的 00-入口/开始这里.md，并按里面的开工流程执行。"
   else
     HELPER_PATH="00-AI/scripts/kb.py"
     START_PATH="00-AI/START-HERE.md"
+    HOME_PATH="index.md"
     AGENT_PROMPT="You are the knowledge base maintenance agent. Read 00-AI/START-HERE.md in this vault and follow its startup workflow."
+  fi
+  if [[ "$MODE" == "shared-core" ]]; then
+    cat <<CORE
+
+Shared core updated. Keep using your vault's existing home and agent entry.
+Check: python3 "$TARGET/$HELPER_PATH" health-check --vault "$TARGET" --mode shared-core
+CORE
+    exit 0
   fi
   cat <<NEXT
 
-Next:
+Open this folder as a vault in Obsidian:
+  $TARGET
+
+Start with the home page:
+  $TARGET/$HOME_PATH
+
+Optional health check:
   python3 "$TARGET/$HELPER_PATH" health-check --vault "$TARGET" --mode "$MODE"
 
 Then send your AI agent:
