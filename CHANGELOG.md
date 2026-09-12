@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.1 - 2026-09-12
+
+- Simplified the homepage to one copyable AI deployment prompt; a dedicated agent guide handles setup, existing vaults, verification, and handoff.
+- Updates now inherit both language and mode from the installed manifest when flags are omitted, including through the shell installer.
+- Installer completion instructions report the effective profile rather than English defaults.
+
 ## 0.13.0 - 2026-09-12
 
 - Reduced a new vault root to its home page and functional directories. License, version, optional agent entry templates, and the update manifest now live in the system area.

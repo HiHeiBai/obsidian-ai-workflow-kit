@@ -101,7 +101,7 @@ status:
 
 ```text
 按《知识库巡检清单 v1》执行一轮巡检：
-1) 先检查 index / START-HERE / AGENTS / Agent-Governance / Knowledge-Pipeline / Recall-System / PROJECTS-REGISTRY 是否可达；
+1) 先检查 首页、开工入口、Agent 规则、治理规则、知识流水线、召回系统和项目注册表（按当前知识库的实际路径） 是否可达；
 2) 列出断链、旧链接和私有库概念残留；
 3) 标出 Inbox 堆积点；
 4) 标出重复、矛盾、过时、孤立内容；

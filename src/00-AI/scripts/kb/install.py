@@ -294,14 +294,16 @@ def install_core(args: argparse.Namespace) -> int:
 def upgrade_core(args: argparse.Namespace) -> int:
     source_root = repo_root()
     target_root = Path(args.target).expanduser().resolve()
-    mode = getattr(args, "mode", DEFAULT_INSTALL_MODE)
     if not target_root.exists():
         raise SystemExit(f"target vault does not exist: {target_root}")
     if target_root == source_root:
         raise SystemExit("target is already this kit repository; choose your own Obsidian vault path")
-    enforce_adapter_write_policy(target_root, args)
-
     manifest = load_manifest(target_root)
+    mode = getattr(args, "mode", None) or manifest.get("mode")
+    if mode not in {"full", "barebone", "shared-core"}:
+        raise SystemExit("cannot infer installed mode; inspect this vault and pass --mode explicitly")
+    args.mode = mode
+    enforce_adapter_write_policy(target_root, args)
     language = language_for_upgrade(args, manifest)
     managed_files = manifest.setdefault("files", {})
     stamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")

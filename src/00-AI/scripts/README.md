@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/m
 curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --update --mode barebone "/path/to/your-vault"
 ```
 
-`--update` upgrades managed kit files from the latest GitHub version. It uses `00-AI/config/kit-manifest.json` (or the legacy root manifest for established shared-core consumers) to tell whether a file is still the original kit file or has been changed by the user.
+`--update` upgrades managed kit files from the latest GitHub version. When language or mode is omitted, the installed manifest supplies that value; routine updates should omit both flags. It uses `00-AI/config/kit-manifest.json` (or the legacy root manifest for established shared-core consumers) to tell whether a file is still the original kit file or has been changed by the user.
 
 Default behavior:
 

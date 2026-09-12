@@ -102,7 +102,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     upgrade = subparsers.add_parser("upgrade-core", help="Upgrade managed kit files in an installed vault")
     upgrade.add_argument("target", help="Target Obsidian vault directory")
-    upgrade.add_argument("--mode", choices=["full", "barebone", "shared-core"], default=DEFAULT_INSTALL_MODE, help="Upgrade full kit, minimal barebone kit, or reusable shared core")
+    upgrade.add_argument("--mode", choices=["full", "barebone", "shared-core"], help="Upgrade mode; defaults to the installed manifest mode")
     upgrade.add_argument("--language", choices=VALID_LANGUAGES, help="Language for user-facing starter files")
     upgrade.add_argument("--overwrite", action="store_true", help="Overwrite modified or unmanaged files")
     upgrade.add_argument("--conflict-copy", action="store_true", help="Write new versions beside conflicted files")

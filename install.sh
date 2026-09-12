@@ -9,8 +9,8 @@ DRY_RUN=0
 OVERWRITE=0
 UPDATE=0
 ALLOW_PROTECTED_ADAPTER_WRITE=0
-MODE="barebone"
-LANGUAGE="en"
+MODE=""
+LANGUAGE=""
 TARGET=""
 TMP_DIR=""
 
@@ -42,7 +42,8 @@ Default behavior:
   - In --update mode, only managed and unmodified kit files are updated.
   - Refuses to write into vaults protected by .obsidian-ai-workflow-kit/adoption-policy.json unless --allow-protected-adapter-write is passed.
   - Installs the minimal starter template by default. Use --mode shared-core for an established managed vault.
-  - Uses --language en unless --language zh-CN is passed.
+  - New installs use --language en unless --language zh-CN is passed.
+  - Updates inherit the installed language and mode unless explicitly supplied.
 USAGE
 }
 
@@ -177,9 +178,13 @@ if [[ "$UPDATE" -eq 1 ]]; then
   COMMAND="upgrade-core"
 fi
 
-ARGS=()
-ARGS+=(--mode "$MODE")
-ARGS+=(--language "$LANGUAGE")
+ARGS=("$COMMAND" "$TARGET")
+if [[ -n "$MODE" ]]; then
+  ARGS+=(--mode "$MODE")
+fi
+if [[ -n "$LANGUAGE" ]]; then
+  ARGS+=(--language "$LANGUAGE")
+fi
 if [[ "$DRY_RUN" -eq 1 ]]; then
   ARGS+=(--dry-run)
 fi
@@ -190,9 +195,25 @@ if [[ "$ALLOW_PROTECTED_ADAPTER_WRITE" -eq 1 ]]; then
   ARGS+=(--allow-protected-adapter-write)
 fi
 
-python3 "$SOURCE/src/00-AI/scripts/kb.py" "$COMMAND" "$TARGET" "${ARGS[@]}"
+python3 "$SOURCE/src/00-AI/scripts/kb.py" "${ARGS[@]}"
 
 if [[ "$DRY_RUN" -eq 0 ]]; then
+  # Report the profile actually used by the CLI, including inferred updates.
+  PROFILE="$(python3 - "$SOURCE" "$TARGET" <<'PYPROFILE'
+import json
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(sys.argv[1]) / "src/00-AI/scripts"))
+from kb.config import find_manifest_path, validate_language
+manifest = json.loads(find_manifest_path(Path(sys.argv[2]).expanduser().resolve()).read_text())
+language = validate_language(manifest.get("language"))
+mode = manifest["mode"]
+if mode not in {"full", "barebone", "shared-core"}:
+    raise SystemExit("invalid installed mode")
+print(language, mode)
+PYPROFILE
+)"
+  read -r LANGUAGE MODE <<< "$PROFILE"
   if [[ "$LANGUAGE" == "zh-CN" ]]; then
     HELPER_PATH="90-系统/脚本/kb.py"
     START_PATH="00-入口/开始这里.md"

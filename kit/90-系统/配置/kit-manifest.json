@@ -58,7 +58,7 @@
       "sha256": "4b9d3832d5f783dd26d69e2246455a855c79b97efdea06863d1ce9475b165761"
     },
     "30-\u7ecf\u9a8c\u8d44\u4ea7/02-\u901a\u7528\u6a21\u5757/\u77e5\u8bc6\u5e93\u5065\u5eb7\u68c0\u67e5\u6e05\u5355-v1.md": {
-      "sha256": "defb7032bbb2ef944d9b808f5acdc4c9794fbb447a959a82de3d13916f9a6a21"
+      "sha256": "5bf9b3bd3fc8538f4881c12c2c70508fd8934b426d0adb0a30f97c06a5925750"
     },
     "30-\u7ecf\u9a8c\u8d44\u4ea7/02-\u901a\u7528\u6a21\u5757/\u9879\u76ee\u7ecf\u9a8c\u6c89\u6dc0\u673a\u5236-v1.md": {
       "sha256": "6dd3442bcfa8e7228c5ed5c0245cc8ccf78a757c02ea6e8aa6be64709ab78079"
@@ -133,7 +133,7 @@
       "sha256": "f5eee63fb76b6585d82d7c3e7e7c5136331316c3256e72cb6bdf587f234d20de"
     },
     "90-\u7cfb\u7edf/\u5173\u4e8e/VERSION": {
-      "sha256": "d84c9e596c7d6a94e5f74579ef8d8912a807b0d28582474900ad35dfb3edfcf4"
+      "sha256": "82526503d51e2bc1964b180753ad02a7465227ae94c41752649d369faa203eab"
     },
     "90-\u7cfb\u7edf/\u53ec\u56de/README.md": {
       "sha256": "7a9dd8d718986c0ca34e76581afcfac7deb3f8572a78a6b6396f61912a37c813"
@@ -214,7 +214,7 @@
       "sha256": "5e8302a1a40e6503644f03ef1dacf7ca945fe2231adb62a30f1a287ccd3fbd1b"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/README.md": {
-      "sha256": "b86a9d835980a700620ea7517af689747326309c6d8ef2109d2a9f4acc89fc5f"
+      "sha256": "91d3c1a913a91935205bd9f4c80d13457812d165b74c540422f96e88584fe727"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb.py": {
       "sha256": "a62c12a1cd6a5871b61c9b0aa913b24af0f3a1318baa988844fd7cc7dfb500ba"
@@ -223,16 +223,16 @@
       "sha256": "5119edeb4b4f8eebff32c424b2c4b5082d2d027c94c143004d3e96a4ba2944fa"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/cli.py": {
-      "sha256": "5bc0b1c2a898f8fd9149867a1a17ad41ed3b3920576d00da2104312be20fa763"
+      "sha256": "4b08352f452b05d5f27e3e8c49f2675d11d6e4c4fe262028f6d64cabd0e5403a"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/config.py": {
       "sha256": "0f211ba12e8d4e2ba9916a53fed04e428e0d9d59583045d737bd071be63799c2"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/health.py": {
-      "sha256": "0fef643191b50c48409868b8a29545ad67dbebdc4295147b7fbd604803c34598"
+      "sha256": "f029dd96e1a17a770f70ce6603f001286e7db9564a036646af0ad32adc9988bc"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/install.py": {
-      "sha256": "b48f9e25695cba4f3b3347d79a3c85be3dd5e239c9f51d98ecea0f4a3f7a98d0"
+      "sha256": "886ec6466cd84179d1f9505d6262620190110a1f9da0c00ad21144e1139f8a5d"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/intake.py": {
       "sha256": "f7d64d2dccaa95b6bd08464551f2934be2d3e15754e5ca79351f2c3a89cad7f5"
@@ -287,6 +287,6 @@
   "language": "zh-CN",
   "mode": "full",
   "schema": 1,
-  "source_version": "0.13.0",
-  "updated_at": "2026-09-12T02:32:50+00:00"
+  "source_version": "0.13.1",
+  "updated_at": "2026-09-12T02:50:57+00:00"
 }

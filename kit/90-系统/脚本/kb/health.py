@@ -443,12 +443,12 @@ def check_private_user_paths(root: Path) -> list[str]:
 
 
 def check_english_readme(root: Path) -> list[str]:
-    readme = root / "README.md"
+    readme = root / ("README.en.md" if (root / "README.en.md").exists() else "README.md")
     if not readme.exists():
         return ["missing README.md"]
     text = readme.read_text(encoding="utf-8")
     if has_chinese(text):
-        return ["README.md contains visible Chinese text"]
+        return [f"{readme.name} contains visible Chinese text"]
     return []
 
 
