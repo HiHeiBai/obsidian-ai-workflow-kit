@@ -37,12 +37,12 @@
 - 不保存密钥、Token、Cookie、验证码、私钥和账号凭据。
 - 不把完整聊天记录写入长期记忆。
 - 不直接复制第三方原文全文。
-- 有项目状态变化时，更新对应项目桥接卡。
+- 有项目状态变化时，先更新项目事实文档，再替换对应桥接卡的当前摘要；无变化不写、不按日期追加。桥接卡正文上限 3000 个 Unicode 字符 / 120 个非空行；当前状态和有效决策各最多 5 点，只有一个首要动作及最多 2 项必要依赖。frontmatter `next_action` 只镜像正文 `首要动作：`；更新时遵守 `00-AI/governance/write-back-rules.md` 的证据保全和计量规则。
 - 如果项目桥接卡缺少 `last_verified`，或当前项目超过 30 天没有事实核验，先提醒用户，并建议复核桥接卡、`current-state.md` 和下一步动作；不要用批量迁移的 `updated` 代替核验日期，也不要因此扫描整个 vault。
 - 有复用价值的经验，写到用户所有的 `20-SharedAssets/01-user-assets/`；`02-modules/` 只保存 kit 维护的通用机制和标准。
 - 遇到失败、误判、返工、测试失败、用户纠正、工具配置损坏、网络/权限/性能异常时，结束前判断是否要沉淀为问题事故经验；需要沉淀时使用 `00-AI/templates/TPL-incident-experience-card.md`。
 - 准备公开发布或从其他 vault 提炼通用模式时，切换到公开 kit 仓库并读取仓库内 `docs/release/source-sync-policy.md`，不要从工作 vault 直接发布。
-- 只有确实需要另一个窗口或 Agent 接手时，才把临时交接写到 `01-Inbox/agent-handoffs/`；文件变化或任务完成本身不触发交接卡。
+- 只有确实需要另一个窗口或 Agent 接手时，才把临时交接写到 `01-Inbox/agent-handoffs/`；文件变化或任务完成本身不触发交接卡。正文上限 1800 个 Unicode 字符 / 80 个非空行，只留接手所需摘要；详细过程先保存到既有项目记录并引用，不得为压缩删除阻塞、授权边界或关键证据。桥接卡和交接卡写后运行 `python3 00-AI/scripts/kb.py check-record <card.md>`。
 
 ### Completion
 
@@ -90,12 +90,12 @@ Older or private vaults may still contain legacy filenames. The public kit now u
 - Do not save secrets, tokens, cookies, verification codes, private keys, or account credentials.
 - Do not save full chat transcripts as long-term memory.
 - Do not copy full third-party source text into the vault.
-- When project state changes, update the matching project bridge card.
+- When project state changes, update the project source documents, then replace the matching current summary in its bridge card. Do not append dated progress logs or write when nothing changed. A bridge body is limited to 3000 Unicode characters and 120 non-empty lines, with up to 5 current-state points, 5 effective decisions, and one primary action plus up to 2 dependencies. The frontmatter `next_action` only mirrors the body `Primary action:`. Follow the counting and evidence-preservation rules in `00-AI/governance/write-back-rules.md`.
 - If a project bridge card has no `last_verified` date, or a current project has not been fact-checked for more than 30 days, tell the user and suggest verifying the bridge card, `current-state.md`, and next action. Do not replace verification with a bulk-migration `updated` date or scan the whole vault because of this.
 - Put reusable lessons in the user-owned `20-SharedAssets/01-user-assets/`; reserve `02-modules/` for kit-managed mechanisms and standards.
 - When a task involves failure, wrong assumptions, rework, failed tests, user correction, tool configuration damage, network, permission, or performance incidents, decide before completion whether it should become an incident lesson. If yes, use `00-AI/templates/TPL-incident-experience-card.md`.
 - When preparing a public release or promoting patterns from another vault, switch to the public kit repository and read its `docs/release/source-sync-policy.md`; do not release directly from a working vault.
-- Put a temporary handoff in `01-Inbox/agent-handoffs/` only when another window or agent genuinely needs to take over. File changes or task completion alone do not trigger a handoff card.
+- Put a temporary handoff in `01-Inbox/agent-handoffs/` only when another window or agent genuinely needs to take over. File changes or task completion alone do not trigger a handoff card. Its body is limited to 1800 Unicode characters and 80 non-empty lines and contains only what the next agent needs. Preserve details in existing project records and link them; never remove unresolved blockers, authorization boundaries, or critical evidence to fit. Exclude opening YAML frontmatter from both budgets, normalize line endings to LF, and count Unicode characters rather than words or tokens. Explain any unavoidable overage; it remains a review finding. After editing either card, run `python3 00-AI/scripts/kb.py check-record <card.md>`.
 
 ### Completion
 

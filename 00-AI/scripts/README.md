@@ -87,6 +87,14 @@ Checks:
 
 Use `--mode barebone` when checking a minimal install.
 
+## Check A Bridge Or Handoff
+
+```bash
+python3 00-AI/scripts/kb.py check-record "10-Projects/my-project/BRIDGE-my-project.md"
+```
+
+Read-only: checks body size (3000 Unicode characters / 120 nonblank lines for bridges, 1800 / 80 for handoffs), duplicate action/log sections, and the `next_action` mirror. Counts exclude opening YAML frontmatter. Detailed history belongs in project records; never cut unresolved blockers, authorization boundaries, or evidence to fit. A short `compact_exception` reason remains a visible review warning. The command exits with 1 for structural errors and does not rewrite the file. Full/barebone health checks include this check; shared-core checks keep their managed-files-only boundary.
+
 ## Stale Check
 
 ```bash

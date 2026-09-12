@@ -111,11 +111,33 @@ def save_manifest(root: Path, manifest: dict, source_root: Path, mode: str, dry_
         manifest["language"] = language
     else:
         manifest.setdefault("language", "en")
-    manifest["updated_at"] = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
     path = manifest_path(root)
+    current = None
+    if path.exists():
+        try:
+            current = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    current_content = (
+        {key: value for key, value in current.items() if key != "updated_at"}
+        if isinstance(current, dict) and current.get("updated_at")
+        else None
+    )
+    desired_content = {
+        key: value for key, value in manifest.items() if key != "updated_at"
+    }
+    unchanged = current_content == desired_content
+    display = path.relative_to(root).as_posix()
     if dry_run:
-        print(f"would update {path.relative_to(root).as_posix()}")
+        print(f"{'unchanged' if unchanged else 'would update'} {display}")
         return
+    if unchanged:
+        manifest["updated_at"] = current["updated_at"]
+        return
+
+    manifest["updated_at"] = (
+        dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
@@ -203,7 +225,7 @@ def install_core(args: argparse.Namespace) -> int:
                 target.parent.mkdir(parents=True, exist_ok=True)
                 write_rendered_install_file(source, target, language)
                 print(f"{action}d {display}")
-                record_managed_file(manifest, relative, source_hash)
+            record_managed_file(manifest, relative, source_hash)
             summary["updated" if action == "update" else "created"] += 1
 
     save_manifest(target_root, manifest, source_root, mode, args.dry_run, language)
@@ -264,8 +286,8 @@ def upgrade_core(args: argparse.Namespace) -> int:
             else:
                 target.parent.mkdir(parents=True, exist_ok=True)
                 write_rendered_install_file(source, target, language)
-                record_managed_file(manifest, relative, source_hash)
                 print(f"created {display}")
+            record_managed_file(manifest, relative, source_hash)
             continue
 
         target_hash = file_sha256(target)
@@ -285,8 +307,8 @@ def upgrade_core(args: argparse.Namespace) -> int:
             else:
                 target.parent.mkdir(parents=True, exist_ok=True)
                 write_rendered_install_file(source, target, language)
-                record_managed_file(manifest, relative, source_hash)
                 print(f"{action}d {display}")
+            record_managed_file(manifest, relative, source_hash)
             continue
 
         summary["conflicts"] += 1
@@ -318,8 +340,8 @@ def upgrade_core(args: argparse.Namespace) -> int:
                     print(f"would remove retired {display}")
                 else:
                     target.unlink()
-                    managed_files.pop(display, None)
                     print(f"removed retired {display}")
+                managed_files.pop(display, None)
                 continue
             summary["conflicts"] += 1
             print(f"preserve modified retired {display}")

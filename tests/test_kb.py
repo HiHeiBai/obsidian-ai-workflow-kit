@@ -272,6 +272,14 @@ class InstallModeTests(unittest.TestCase):
             kb.install_core(install_args)
             managed = target / "90-系统" / "规则" / "写回规则.md"
             before = kb.file_sha256(managed)
+            manifest_path = target / ".obsidian-ai-workflow-kit" / "manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["updated_at"] = "2000-01-01T00:00:00+00:00"
+            manifest_path.write_text(
+                json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            manifest_before = manifest_path.read_bytes()
             output = io.StringIO()
             upgrade_args = argparse.Namespace(
                 target=str(target),
@@ -287,8 +295,23 @@ class InstallModeTests(unittest.TestCase):
                 kb.upgrade_core(upgrade_args)
 
             self.assertEqual(kb.file_sha256(managed), before)
+            self.assertEqual(manifest_path.read_bytes(), manifest_before)
             self.assertIn("0 updated", output.getvalue())
             self.assertIn("0 conflicts", output.getvalue())
+
+            upgrade_args.dry_run = True
+            dry_run_output = io.StringIO()
+            with redirect_stdout(dry_run_output):
+                kb.upgrade_core(upgrade_args)
+
+            self.assertIn(
+                "unchanged .obsidian-ai-workflow-kit/manifest.json",
+                dry_run_output.getvalue(),
+            )
+            self.assertNotIn(
+                "would update .obsidian-ai-workflow-kit/manifest.json",
+                dry_run_output.getvalue(),
+            )
 
     def test_shared_core_upgrade_removes_only_unmodified_retired_files(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -851,6 +874,18 @@ class InstallLanguageTests(unittest.TestCase):
             health_args = argparse.Namespace(vault=str(target), mode="barebone")
             self.assertEqual(kb.health_check(health_args), 0)
 
+    def test_chinese_root_agent_entries_point_to_the_real_system_root(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            target = Path(tmp) / "vault"
+
+            kb.install_core(self.install_args(target, "zh-CN"))
+
+            for filename in ("CLAUDE.md", "AGENTS.md"):
+                text = (target / filename).read_text(encoding="utf-8")
+                self.assertIn("00-入口/开始这里.md", text)
+                self.assertIn("90-系统/", text)
+                self.assertNotIn("90-系统/AI/", text)
+
     def test_chinese_start_here_routes_document_organization_to_direct_suggestions(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "vault"
@@ -1031,6 +1066,37 @@ class ProjectBridgeNamingTests(unittest.TestCase):
 
         self.assertIn("20-SharedAssets/01-user-assets/", text)
         self.assertIn("managed `02-modules/`", text)
+
+    def test_new_project_starts_compact_with_one_action_and_no_claimed_verification(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            kb.new_project(
+                argparse.Namespace(
+                    slug="compact-demo",
+                    vault=tmp,
+                    name="示例 Project",
+                    root=None,
+                    dry_run=False,
+                )
+            )
+            project = Path(tmp) / "10-Projects" / "compact-demo"
+            bridge = project / "BRIDGE-compact-demo.md"
+            text = bridge.read_text(encoding="utf-8")
+            metadata, _ = kb.read_frontmatter(bridge)
+            body = text.split("---", 2)[2]
+
+            self.assertLessEqual(len(body), 3000)
+            self.assertLessEqual(sum(bool(line.strip()) for line in body.splitlines()), 120)
+            self.assertEqual(text.count("## Next Action"), 1)
+            primary_actions = [
+                line.removeprefix("- Primary action: ")
+                for line in body.splitlines()
+                if line.startswith("- Primary action: ")
+            ]
+            self.assertEqual(primary_actions, [metadata["next_action"]])
+            self.assertFalse(metadata.get("last_verified"))
+            self.assertNotIn("## Next Startup", text)
+            self.assertNotIn("## Verification Log", text)
+            self.assertNotIn("## Next Action", (project / "README.md").read_text(encoding="utf-8"))
 
     def test_new_project_uses_agent_neutral_bridge_filename(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1355,6 +1421,35 @@ status: active
             self.assertEqual(count, 1)
             self.assertIn("CODEX-BRIDGE-legacy-project.md", report)
 
+    def test_ignores_archived_project_history_named_like_legacy_bridge(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            project = root / "10-Projects" / "history"
+            project.mkdir(parents=True)
+            history = project / "CODEX-BRIDGE-history-2026-05-30.md"
+            history.write_text(
+                """---
+type: project-history
+status: archived
+updated: 2026-05-20
+---
+
+# Historical record
+""",
+                encoding="utf-8",
+            )
+
+            report, count = kb.build_stale_report(
+                root,
+                max_age_days=7,
+                inbox_threshold=10,
+                today=kb.dt.date(2026, 6, 1),
+            )
+
+            self.assertEqual(count, 0)
+            self.assertNotIn(history.name, report)
+            self.assertIn("No stale bridge cards.", report)
+
     def test_reports_inbox_when_file_count_exceeds_threshold(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -1386,10 +1481,11 @@ status: active
                 today=kb.dt.date(2026, 6, 1),
             )
 
-            self.assertIn("updated` field", report)
+            self.assertIn("project sources", report)
             self.assertIn("current state", report)
-            self.assertIn("recent decisions", report)
-            self.assertIn("next startup action", report)
+            self.assertIn("last_verified", report)
+            self.assertIn("only when another window or agent needs to take over", report)
+            self.assertNotIn("handoff if this session changed project state", report)
 
     def test_stale_patterns_are_loaded_from_kit_config(self):
         with tempfile.TemporaryDirectory() as tmp:

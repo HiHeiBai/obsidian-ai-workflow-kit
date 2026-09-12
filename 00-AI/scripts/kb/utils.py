@@ -108,5 +108,33 @@ def read_frontmatter_value(path: Path, key: str) -> str | None:
         if line.strip() == "---":
             return None
         if line.startswith(f"{key}:"):
-            return line.split(":", 1)[1].strip().strip('"').strip("'")
+            return frontmatter_scalar(line.split(":", 1)[1])
     return None
+
+
+def frontmatter_scalar(value: str) -> str:
+    """Read simple YAML scalars without treating a quoted # as a comment."""
+    value = value.strip()
+    if not value or value.startswith("#"):
+        return ""
+    if value[0] in {"'", '"'}:
+        quote = value[0]
+        index = 1
+        while index < len(value):
+            if quote == '"' and value[index] == "\\":
+                index += 2
+                continue
+            if value[index] == quote:
+                if quote == "'" and value[index:index + 2] == "''":
+                    index += 2
+                    continue
+                literal = value[:index + 1]
+                if quote == "'":
+                    return literal[1:-1].replace("''", "'")
+                try:
+                    return json.loads(literal)
+                except json.JSONDecodeError:
+                    return literal[1:-1]
+            index += 1
+        return value
+    return re.split(r"\s+#", value, maxsplit=1)[0].rstrip()
