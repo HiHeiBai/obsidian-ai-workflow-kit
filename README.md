@@ -22,9 +22,19 @@ It is a file-system-level workflow, not an app, community plugin, cloud memory s
 
 ## Start fast
 
+### Download and open the Chinese vault
+
+1. [Download the GitHub ZIP](https://github.com/HiHeiBai/obsidian-ai-workflow-kit/archive/refs/heads/main.zip) and extract it.
+2. In Obsidian, select **Open folder as vault** and choose the **`kit/` subfolder**.
+3. Open its home page, linked from the [Chinese quick start](README.zh-CN.md).
+
+[`kit/`](kit/) is a complete, ready-to-open Chinese vault. Its folders are the same on GitHub, in the extracted download, and in Obsidian. No installer is needed. You can copy the whole `kit/` folder to your preferred location before opening it.
+
+For an English vault or an existing vault, use the installer below.
+
 ### New or existing vault
 
-Install the minimal layer into an empty folder or your existing vault. Open the **installation target folder** in Obsidian, then open `index.md` for the human-facing home page. The GitHub repository contains development resources; the installer builds your working vault from them.
+Install the minimal layer into an empty folder or your existing vault. Open the **installation target folder** in Obsidian, then open `index.md` for the human-facing home page. The installer builds your working vault from the internal `src/` templates. The ready-to-open `kit/` folder is the Chinese edition.
 
 The installer writes English paths and starter text by default. Use `--language zh-CN` for Chinese paths and starter text.
 
@@ -77,7 +87,7 @@ curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/m
 
 Updates use a local manifest to replace only managed kit files that you have not edited.
 
-The downloadable `v0.9.1` archives remain historical snapshots. Starting with `v0.10.0`, ongoing maintenance uses repository source plus the managed installer, and the project no longer builds custom customer ZIP packages.
+The standard GitHub ZIP includes the ready-to-open Chinese `kit/`. For a vault you already use, preview managed updates instead of copying a fresh download over your notes. The custom `v0.9.1` archives remain historical snapshots.
 
 ### Keep an established working vault in sync
 
@@ -86,15 +96,15 @@ Use `shared-core` when the vault already has its own entry, projects, Inbox, arc
 From a local clone of this repository, preview and then apply:
 
 ```bash
-python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
-python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
+python3 src/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
+python3 src/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
 ```
 
 The target vault must explicitly allow only `shared-core` in `.obsidian-ai-workflow-kit/adoption-policy.json`. See [Source Sync Policy](docs/release/source-sync-policy.md).
 
 ### See the handoff in 30 seconds
 
-Install a separate demo vault to try the workflow before using your own notes:
+For the Chinese demo, open the downloaded `kit/` and follow the [Chinese demo guide](docs/30-second-demo.zh-CN.md). For an English demo, install a separate vault:
 
 1. Follow [30-Second Demo](docs/30-second-demo.md) to install full mode into a new test folder.
 2. In Obsidian, choose **Open folder as vault** and select that installation target.
@@ -179,7 +189,7 @@ Not a good fit:
 - [Migration Guide](docs/migration.md)
 - [Concepts](docs/concepts.md)
 - [Templates](docs/templates.md)
-- [Scripts](kit/00-AI/scripts/README.md)
+- [Scripts](src/00-AI/scripts/README.md)
 - [v0.9.1 Release Notes](docs/release/v0.9.1-release-notes.md)
 
 ## Your installed vault
@@ -204,25 +214,20 @@ Chinese installations use localized folder and home-page names. See [the Chinese
 
 ## Source repository
 
-For contributors, the GitHub checkout is organized separately:
+Open `kit/` for everyday use. The other directories support development and installation:
 
 ```text
-kit/                       installable vault templates and runtime scripts
+kit/                       ready-to-open full Chinese vault
+src/                       internal installer templates and language resources
   00-AI/                   rules, templates, language variants, and CLI
-  01-Inbox/                Inbox starter files
-  10-Projects/             project starter files
-  20-SharedAssets/          reusable asset starter files
-  40-ExternalSources/      source starter files
-  index.md                 installed home-page source
-  AGENTS.md / CLAUDE.md    installed agent-entry sources
 docs/                      documentation and contributor records
-examples/                  source examples selected by full installation
+examples/                  source examples used to build the vault
 assets/                    repository presentation assets
 tests/                     development tests
-install.sh                 installer entry point
+install.sh                 installer for existing vaults and language selection
 ```
 
-Run `bash install.sh "/path/to/your-vault"` from this checkout, then open the target folder in Obsidian. Installing full mode does not copy repository READMEs, the installer, changelog, or top-level development directories into your vault.
+The [Chinese guide](README.zh-CN.md) shows the actual `kit/` folder names. The English layout above applies to English installations. Repository READMEs, the installer, changelog, and development directories remain outside `kit/`.
 
 ## Maturity
 
@@ -240,4 +245,4 @@ This is a workflow kit, not an automation platform. If project state, decisions,
 
 ## Version
 
-Current version: `0.12.0`. See [CHANGELOG.md](CHANGELOG.md).
+Current version: `0.12.1`. See [CHANGELOG.md](CHANGELOG.md).

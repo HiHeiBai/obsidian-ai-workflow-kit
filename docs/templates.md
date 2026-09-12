@@ -4,14 +4,14 @@ The templates are optional Markdown starting points. Use them when a note needs 
 
 | Template | Use |
 |---|---|
-| [Project Bridge Card](../kit/00-AI/templates/TPL-project-bridge-card.md) | Project handoff and continuation |
-| [Agent Handoff Card](../kit/00-AI/templates/TPL-agent-handoff-card.md) | End-of-session handoff |
-| [Source Analysis Card](../kit/00-AI/templates/TPL-source-analysis-card.md) | External source analysis |
-| [Task State Card](../kit/00-AI/templates/TPL-task-state-card.md) | Task state tracking |
-| [Acceptance Record](../kit/00-AI/templates/TPL-acceptance-record.md) | Acceptance record |
-| [Question Knowledge / Experience Asset Card](../kit/00-AI/templates/TPL-question-knowledge-experience-asset-card.md) | Reusable question and experience asset |
-| [Incident Experience Card](../kit/00-AI/templates/TPL-incident-experience-card.md) | Failure, rework, wrong-assumption, and tool-incident lesson |
-| [Web Clip Minimal Template](../kit/00-AI/templates/TPL-web-clip-minimal.md) | Raw Web Clipper capture |
+| [Project Bridge Card](../src/00-AI/templates/TPL-project-bridge-card.md) | Project handoff and continuation |
+| [Agent Handoff Card](../src/00-AI/templates/TPL-agent-handoff-card.md) | End-of-session handoff |
+| [Source Analysis Card](../src/00-AI/templates/TPL-source-analysis-card.md) | External source analysis |
+| [Task State Card](../src/00-AI/templates/TPL-task-state-card.md) | Task state tracking |
+| [Acceptance Record](../src/00-AI/templates/TPL-acceptance-record.md) | Acceptance record |
+| [Question Knowledge / Experience Asset Card](../src/00-AI/templates/TPL-question-knowledge-experience-asset-card.md) | Reusable question and experience asset |
+| [Incident Experience Card](../src/00-AI/templates/TPL-incident-experience-card.md) | Failure, rework, wrong-assumption, and tool-incident lesson |
+| [Web Clip Minimal Template](../src/00-AI/templates/TPL-web-clip-minimal.md) | Raw Web Clipper capture |
 
 ## When To Use Each Template
 

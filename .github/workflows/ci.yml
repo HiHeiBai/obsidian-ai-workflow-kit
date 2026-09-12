@@ -21,11 +21,11 @@ jobs:
 
       - name: Check script syntax
         run: |
-          python3 -m py_compile kit/00-AI/scripts/kb.py kit/00-AI/scripts/kb/*.py examples/claude-code-hooks/stop-session-check.py
+          python3 -m py_compile src/00-AI/scripts/kb.py src/00-AI/scripts/kb/*.py examples/claude-code-hooks/stop-session-check.py
           bash -n install.sh tests/test_install.sh tests/test_tools.sh
 
       - name: Run kit health check
-        run: python3 kit/00-AI/scripts/kb.py health-check
+        run: python3 src/00-AI/scripts/kb.py health-check
 
       - name: Run Python unit tests
         run: python3 -m unittest discover -s tests
@@ -35,3 +35,8 @@ jobs:
 
       - name: Run tool tests
         run: bash tests/test_tools.sh
+
+      - name: Verify directly usable Chinese vault
+        run: |
+          python3 scripts/build_kit.py --check
+          python3 kit/90-系统/脚本/kb.py health-check --vault kit

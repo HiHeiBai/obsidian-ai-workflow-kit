@@ -16,54 +16,52 @@
 
 ## 快速开始
 
-### 新建或安装到已有 vault
+### 下载即用：打开中文知识库
 
-先把最小层安装到空目录或已有 vault，再用 Obsidian 打开**安装目标文件夹**，点击 `首页.md`。GitHub 仓库保存开发源码；安装器从中生成日常使用的知识库目录。
+1. [下载 GitHub ZIP](https://github.com/HiHeiBai/obsidian-ai-workflow-kit/archive/refs/heads/main.zip)，解压。
+2. 在 Obsidian 中选择 **打开本地仓库 / Open folder as vault**，选择解压目录里的 **`kit/` 文件夹**。
+3. 点击 `首页.md`，从首页进入项目、资料和经验资产。
 
-安装器默认写入 English 路径和启动文本。中文用户请加 `--language zh-CN`，安装后的核心目录也会使用中文路径。
+[`kit/`](kit/) 本身就是完整的中文知识库。GitHub 上看到的目录、下载后的目录和 Obsidian 打开的目录一致，无需安装器转换。也可以把整个 `kit/` 文件夹复制到你想长期保存知识库的位置，再用 Obsidian 打开。
 
-先预览：
+把这句话发给能读取本地文件的 AI Agent，将占位符换成你打开的 `kit/` 文件夹（或复制后的文件夹）的绝对路径：
+
+```text
+你是知识库维护 Agent。这个 Obsidian vault 的根目录是：<知识库绝对路径>。请先读取该目录下的 00-入口/开始这里.md，并按里面的开工流程执行。
+```
+
+### 已有知识库：按需安装
+
+给已有 vault 添加最小工作流时，可以使用安装器。先预览，再安装：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --language zh-CN --dry-run "/path/to/your-vault"
-```
-
-确认后安装：
-
-```bash
 curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --language zh-CN "/path/to/your-vault"
 ```
 
-检查：
+安装器默认使用最小的 `barebone` 模式；加 `--mode full` 可安装与 `kit/` 同样范围的完整中文库。安装后用 Obsidian 打开安装目标文件夹，点击 `首页.md`。默认跳过已有文件，只有显式传入 `--overwrite` 才会覆盖。
+
+检查最小安装：
 
 ```bash
 python3 "/path/to/your-vault/90-系统/脚本/kb.py" health-check --vault "/path/to/your-vault" --mode barebone
 ```
 
-然后把这句话发给你的 AI Agent：
-
-```text
-你是知识库维护 Agent。这个 Obsidian vault 的根目录是：<your-vault-path>。请先读取该目录下的 00-入口/开始这里.md，并按里面的开工流程执行。
-```
-
-如果你想安装完整 starter vault，包括资料流水线、召回系统、文档、示例和模板，可以使用进阶的 full 模式：
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --language zh-CN --mode full "/path/to/your-vault"
-```
-
-安装器默认跳过已有文件；只有你明确传入 `--overwrite` 才会覆盖。
-
-后续更新：
+后续通过安装器更新时，先预览：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --language zh-CN --update --dry-run "/path/to/your-vault"
 curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --language zh-CN --update "/path/to/your-vault"
 ```
 
-更新时会读取本地 manifest，只替换仍然保持原样的 kit 文件，不静默覆盖你改过的内容。
+上面两条更新命令用于最小安装。直接下载的 `kit/` 是完整库，更新时保留 `--mode full`：
 
-`v0.9.1` 下载包仅保留为历史快照。从 `v0.10.0` 起，后续维护只使用仓库源码和 managed installer，不再构建定制客户 ZIP 包。
+```bash
+curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --language zh-CN --mode full --update --dry-run "/path/to/your-vault"
+curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --language zh-CN --mode full --update "/path/to/your-vault"
+```
+
+托管更新依据本地 manifest 处理文件，保留你的修改；不要把重新下载的 `kit/` 整体覆盖到已经使用的知识库上。
 
 ### 让长期使用的本地主库保持同步
 
@@ -72,21 +70,21 @@ curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/m
 在公开仓库本地 clone 中先预览，再执行：
 
 ```bash
-python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
-python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
+python3 src/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
+python3 src/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN
 ```
 
 目标 Vault 必须在 `.obsidian-ai-workflow-kit/adoption-policy.json` 中明确只允许 `shared-core`。详细边界见 [Source Sync Policy](docs/release/source-sync-policy.md)。
 
 ### 30 秒演示
 
-先安装一个独立的演示库，体验后再用于自己的笔记：
+直接使用下载的 `kit/` 体验：
 
-1. 按 [30 秒演示](docs/30-second-demo.zh-CN.md) 将 full 模式安装到新的测试文件夹。
-2. 在 Obsidian 里选择 **Open folder as vault**，选中安装目标文件夹。
-3. 打开 `首页.md`，再把演示提示词发给 AI Agent。
+1. 用 Obsidian 打开 `kit/`，点击 `首页.md`。
+2. 按 [30 秒演示](docs/30-second-demo.zh-CN.md) 把只读提示词发给 AI Agent。
+3. AI 读取已填好的项目桥接卡，回答当前状态、最新决策和下一步动作。
 
-安装完成后，AI 会用只读方式读取已填好的项目桥接卡，回答当前状态、最新决策和下一步动作。不需要 Obsidian 社区插件。
+无需运行安装命令，也不需要 Obsidian 社区插件。
 
 ## 你会得到什么
 
@@ -162,12 +160,12 @@ bash install.sh --language zh-CN "/path/to/your-vault"
 - [迁移指南](docs/migration.md)
 - [核心概念](docs/concepts.zh-CN.md)
 - [模板说明](docs/templates.zh-CN.md)
-- [脚本说明](kit/00-AI/scripts/README.md)
+- [脚本说明](src/00-AI/scripts/README.md)
 - [v0.9.1 发布说明](docs/release/v0.9.1-release-notes.md)
 
-## 安装后的知识库
+## 下载后看到的知识库
 
-中文安装的日常目录如下：
+GitHub 的 `kit/` 和中文 full 安装使用相同的日常目录：
 
 ```text
 首页.md                    人从这里开始
@@ -177,8 +175,8 @@ bash install.sh --language zh-CN "/path/to/your-vault"
 20-资料/                    外部资料和本机资料处理流程
 30-经验资产/                可复用方法和经验
 90-系统/                    规则、召回、视图、模板、脚本和配置
-  使用指南/                 日常使用说明（仅 full）
-  示例/                     工作流参考示例（仅 full）
+  使用指南/                 日常使用说明
+  示例/                     工作流参考示例
 ```
 
 日常先看首页，再按任务进入项目、资料或经验资产。系统规则和参考说明集中在 `90-系统/`，不用逐个浏览才能开始。
@@ -187,27 +185,22 @@ bash install.sh --language zh-CN "/path/to/your-vault"
 
 English 安装沿用英文目录，详见 [English guide](README.md)。
 
-## GitHub 源码目录
+## GitHub 仓库目录
 
-仓库按维护职责组织，供开发和贡献使用：
+普通用户打开 `kit/` 即可；维护和贡献代码时再使用其余目录：
 
 ```text
-kit/                       可安装的知识库模板与运行脚本
-  00-AI/                   规则、模板、多语言版本和 CLI
-  01-Inbox/                收件箱初始内容
-  10-Projects/             项目初始内容
-  20-SharedAssets/          经验资产初始内容
-  40-ExternalSources/      资料初始内容
-  index.md                 安装后首页的源文件
-  AGENTS.md / CLAUDE.md    安装后 AI 入口的源文件
+kit/                       可直接打开的完整中文知识库
+src/                       安装器内部模板、多语言资源与 CLI
+  00-AI/                   规则、模板、多语言版本和运行脚本
 docs/                      使用文档和开发记录
-examples/                  full 安装选用的示例源文件
+examples/                  用于生成知识库的示例源文件
 assets/                    仓库展示素材
 tests/                     开发测试
-install.sh                 安装入口
+install.sh                 已有库与多语言安装入口
 ```
 
-在仓库目录运行 `bash install.sh --language zh-CN "/path/to/your-vault"`，然后用 Obsidian 打开目标目录。full 模式只安装选定的使用说明与示例，仓库 README、安装器、更新日志、发布清单和研发计划留在源码仓库。
+`src/` 是开发源文件，安装器从中生成目标知识库。中文日常目录已生成并保存在 `kit/`；README、更新日志和开发测试留在仓库根目录，选择 `kit/` 作为 vault 时不会混入知识库。
 
 ## 成熟度
 
@@ -225,4 +218,4 @@ install.sh                 安装入口
 
 ## Version
 
-当前版本：`0.12.0`。见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`0.12.1`。见 [CHANGELOG.md](CHANGELOG.md)。

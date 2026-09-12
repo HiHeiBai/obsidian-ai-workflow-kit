@@ -47,7 +47,7 @@ Generated lessons and experience assets belong in `20-SharedAssets/01-user-asset
 Preview every update first:
 
 ```bash
-python3 kit/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
+python3 src/00-AI/scripts/kb.py upgrade-core "/path/to/working-vault" --mode shared-core --language zh-CN --dry-run
 ```
 
 After review, run the same command without `--dry-run`. Re-running an unchanged version must produce zero updated files and zero conflicts.

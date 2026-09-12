@@ -1,6 +1,8 @@
 # 30-Second Demo
 
-Set up a separate demo vault, then ask an AI agent to summarize a project in about 30 seconds. The installation target is the folder you open in Obsidian.
+For the ready-to-open Chinese demo, [download the GitHub ZIP](https://github.com/HiHeiBai/obsidian-ai-workflow-kit/archive/refs/heads/main.zip), extract it, and open the `kit/` subfolder in Obsidian. Follow the [Chinese demo guide](30-second-demo.zh-CN.md) for its entry paths and prompt. No installation is needed.
+
+For an English demo, use the installation steps below, then ask an AI agent to summarize a project in about 30 seconds. Open the installation target folder in Obsidian.
 
 ## Set up the demo vault
 

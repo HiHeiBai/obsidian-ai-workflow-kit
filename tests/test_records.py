@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "kit" / "00-AI" / "scripts"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src" / "00-AI" / "scripts"))
 from kb.records import check_record, record_findings
 
 

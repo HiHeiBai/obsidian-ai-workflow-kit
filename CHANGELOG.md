@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.1 - 2026-09-12
+
+- Made `kit/` a complete Chinese vault that can be opened directly after downloading the repository ZIP. Its visible directories and files match a Chinese full installation.
+- Moved maintainer templates to `src/`; a build/check command keeps the ready-to-open vault and installer output aligned. English and managed upgrade paths remain supported.
+
 ## 0.12.0 - 2026-09-12
 
 - Separated installable templates and runtime into `kit/`, keeping developer tests and documentation outside the vault source.

@@ -13,7 +13,7 @@ from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CLI = ROOT / "kit/00-AI/scripts/kb.py"
+CLI = ROOT / "src/00-AI/scripts/kb.py"
 LEGACY_REF = "6c6e351"
 LAYOUTS = {
     "en": {
@@ -64,10 +64,10 @@ class InstalledLayoutTests(unittest.TestCase):
 
     def test_source_commands_survive_chinese_localization(self):
         import importlib.util
-        spec = importlib.util.spec_from_file_location("layout_config", ROOT / "kit/00-AI/scripts/kb/config.py")
+        spec = importlib.util.spec_from_file_location("layout_config", ROOT / "src/00-AI/scripts/kb/config.py")
         config = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(config)
-        text = "python3 kit/00-AI/scripts/kb.py upgrade-core; docs/release/source-sync-policy.md"
+        text = "python3 src/00-AI/scripts/kb.py upgrade-core; docs/release/source-sync-policy.md"
         self.assertEqual(config.localize_text_references(text, "zh-CN"), text)
 
     def test_clean_install_matrix_and_isolated_runtime(self):

@@ -4,7 +4,7 @@ Use this kit gradually. Do not rebuild an existing Obsidian vault.
 
 ## Upgrading to v0.12: source and vault layout
 
-The GitHub repository now keeps installable templates in `kit/`. Run the installer from the repository root; the installed CLI keeps its existing path. Re-run `install.sh --update` from the new repository (or use the remote installer), retaining your existing mode and language, and preview with `--dry-run` first.
+The GitHub repository keeps maintained templates in `src/`; `kit/` is a complete Chinese vault ready to open after downloading the ZIP. Run the installer from the repository root; the installed CLI keeps its existing path. Re-run `install.sh --update` from the new repository (or use the remote installer), retaining your existing mode and language, and preview with `--dry-run` first.
 
 A new full installation has one home page and working directories. User guides and examples are inside the system directory: `00-AI/help` and `00-AI/examples` in English, or `90-系统/使用指南` and `90-系统/示例` in Chinese. Repository READMEs, installer, changelog, release checklists, and development plans are no longer installed. Root agent pointers, license, and version remain.
 

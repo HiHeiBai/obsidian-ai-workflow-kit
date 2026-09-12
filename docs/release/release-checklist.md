@@ -2,13 +2,19 @@
 
 Use this checklist before switching the repository public or announcing a release.
 
+## Direct Download Checks
+
+- [ ] `python3 scripts/build_kit.py --check` confirms `kit/` matches Chinese full installer output.
+- [ ] Copy `kit/` outside the repository; its Chinese home, agent entry, links, health check, and project creation work independently.
+- [ ] ZIP instructions open `kit/` directly; source templates stay under `src/`.
+
 ## Required Checks
 
 - [ ] Repository visibility decision is intentional.
 - [ ] `README.md` explains who this is for, who it is not for, and current maturity.
 - [ ] If the release promotes a pattern from a working vault, `docs/release/source-sync-policy.md` has been checked.
 - [ ] One-line installer has been tested from a clean environment.
-- [ ] `python3 kit/00-AI/scripts/kb.py health-check` passes.
+- [ ] `python3 src/00-AI/scripts/kb.py health-check` passes.
 - [ ] `bash tests/test_install.sh` passes.
 - [ ] `bash tests/test_tools.sh` passes.
 - [ ] `python3 -m unittest discover -s tests` passes with no regression from the previous release.

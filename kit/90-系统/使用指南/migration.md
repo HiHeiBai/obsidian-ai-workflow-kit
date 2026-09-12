@@ -1,0 +1,194 @@
+# Migration Guide
+
+Use this kit gradually. Do not rebuild an existing Obsidian vault.
+
+## Upgrading to v0.12: source and vault layout
+
+The GitHub repository keeps maintained templates in `src/`; `kit/` is a complete Chinese vault ready to open after downloading the ZIP. Run the installer from the repository root; the installed CLI keeps its existing path. Re-run `install.sh --update` from the new repository (or use the remote installer), retaining your existing mode and language, and preview with `--dry-run` first.
+
+A new full installation has one home page and working directories. User guides and examples are inside the system directory: `90-系统/使用指南` and `90-系统/示例` in English, or `90-系统/使用指南` and `90-系统/示例` in Chinese. Repository READMEs, installer, changelog, release checklists, and development plans are no longer installed. Root agent pointers, license, and version remain.
+
+Managed upgrades remove retired kit files only when they still match their recorded hashes. Modified old guides/examples and untracked user notes stay in place and are reported for review; this can leave old directories present. Review those documents before moving them yourself. Empty retired directories are removed. The updater does not rewrite private note links to moved documents, so review links from your own notes if they referenced the old `90-系统/使用指南/` or `90-系统/示例/` paths. Shared-core installations keep their ownership boundary and do not adopt the new homepage or user directories.
+
+## Upgrading From v0.8 To v0.9
+
+The v0.9 upgrade has two separate steps so kit files and user-owned notes are never treated the same.
+
+First preview and upgrade managed kit files. Keep the same language and mode as the existing install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --update --mode full --dry-run "/path/to/your-vault"
+curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --update --mode full "/path/to/your-vault"
+```
+
+Use `--mode barebone` for a barebone installation. The updater creates new kit files and updates only managed files that still match their previous checksum. Modified and unmanaged files are skipped.
+
+Then preview the metadata migration:
+
+```bash
+python3 90-系统/脚本/kb.py migrate-v0.9 --vault "/path/to/your-vault" --dry-run
+```
+
+It reports legacy dispatch-card moves, task status mappings, exact folder-reference updates, and project bridge cards that can safely receive `project_entry: true`. The old dispatch directory is removed only after every real file has moved and the directory is empty.
+
+Apply only after the preview is correct:
+
+```bash
+python3 90-系统/脚本/kb.py migrate-v0.9 --vault "/path/to/your-vault"
+python3 90-系统/脚本/kb.py health-check --vault "/path/to/your-vault"
+```
+
+The migration stops before writing when a task destination already exists or a project has multiple current bridge cards. Resolve that ambiguity manually; do not use `--overwrite` as a migration shortcut. Legacy `owner_role` and `owner_agent` values are left in user-owned cards as historical data, but new templates no longer create them.
+
+## If You Are Starting Fresh
+
+1. Clone or download this repository.
+2. Open the folder in Obsidian with **Open folder as vault**.
+3. Read `00-入口/开始这里.md`.
+4. Create your first real project bridge card:
+
+```bash
+python3 90-系统/脚本/kb.py new-project my-project --name "My Project" --root "/path/to/project"
+```
+
+5. Fill only three files first:
+
+- `10-项目/my-project/BRIDGE-my-project.md`
+- `10-项目/my-project/current-state.md`
+- `10-项目/my-project/decisions.md`
+
+## If You Already Have a Vault
+
+1. Copy only these files and folders into your existing vault:
+
+- `00-入口/开始这里.md`
+- `90-系统/AI协作规则.md`
+- `90-系统/规则/`
+- `20-资料/处理流程/`
+- `90-系统/召回/`
+- `10-项目/`
+- `30-经验资产/`
+- `20-资料/`
+- `90-系统/模板/`
+- `90-系统/脚本/`
+
+2. Do not move all existing notes.
+3. Pick one active project.
+4. Create one bridge card for that project.
+5. Link existing notes from the bridge card instead of reorganizing them.
+
+## If You Used Older Codex-Specific Names
+
+Version `0.6.0` changed the public default naming from Codex-specific names to agent-neutral names.
+
+Preview the rename first:
+
+```bash
+python3 90-系统/脚本/kb.py migrate-codex-names --vault "/path/to/your-vault" --dry-run
+```
+
+Apply it:
+
+```bash
+python3 90-系统/脚本/kb.py migrate-codex-names --vault "/path/to/your-vault"
+```
+
+This command renames legacy files such as `CODEX-BRIDGE-my-project.md` to `BRIDGE-my-project.md`, renames old Chinese/Codex-specific template filenames to English filenames, and updates Markdown references.
+
+## If You Used The Older Scattered AI Layout
+
+Version `0.7.0` moved AI-facing files into one top-level `90-系统/` directory.
+
+Preview the layout migration first:
+
+```bash
+python3 90-系统/脚本/kb.py migrate-ai-layout --vault "/path/to/your-vault" --dry-run
+```
+
+Apply it:
+
+```bash
+python3 90-系统/脚本/kb.py migrate-ai-layout --vault "/path/to/your-vault"
+```
+
+This command moves legacy paths such as `START-HERE.md`, `AGENTS.md`, `00-Agent-Governance/`, `02-Knowledge-Pipeline/`, `03-Recall-System/`, `90-Templates/`, and `scripts/` into `90-系统/`, then updates Markdown references.
+
+After migration, run:
+
+```bash
+python3 90-系统/脚本/kb.py health-check --vault "/path/to/your-vault"
+python3 90-系统/脚本/kb.py stale-check --vault "/path/to/your-vault"
+```
+
+## Keeping The Kit Updated
+
+New installs write a small manifest at `.obsidian-ai-workflow-kit/manifest.json`. Future updates use it to distinguish kit-managed files from user-edited files.
+
+Preview an update first:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --update --mode barebone --dry-run "/path/to/your-vault"
+```
+
+Apply it:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --update --mode barebone "/path/to/your-vault"
+```
+
+Update behavior:
+
+- New kit files are created.
+- Unmodified managed files are updated.
+- User-edited files are skipped.
+- Existing files without manifest history are treated as user-owned.
+- New full-mode Base files are created without requiring Dataview or a community plugin.
+
+If you need to compare a skipped file with the new kit version:
+
+```bash
+python3 90-系统/脚本/kb.py upgrade-core "/path/to/your-vault" --mode barebone --conflict-copy
+```
+
+## If You Want AI To Organize Existing Local Materials
+
+1. Pick one folder, not your whole computer.
+2. Ask AI to read `20-资料/处理流程/本机资料进入流程.md`.
+3. Let AI classify the folder into:
+
+- project memory
+- external source analysis
+- reusable lessons
+- temporary Inbox items
+
+4. Move or summarize only the high-value material.
+5. Add recall entries only after the material becomes useful for future tasks.
+
+## First Project Bridge Card
+
+A useful first bridge card should answer:
+
+- What project is this?
+- Where is the local project folder?
+- What is the current state?
+- What decisions are stable?
+- What should the next AI session read first?
+- Where should the result be written back?
+
+## What Not To Migrate
+
+- Full chat history.
+- Temporary scratch notes.
+- Old web clips without source value.
+- Private credentials or account data.
+- Every note in your vault.
+
+## Good First Acceptance Check
+
+After migration, give an AI agent this instruction:
+
+```text
+You are the knowledge base maintenance agent. Read 00-入口/开始这里.md in the current vault and follow its startup workflow.
+```
+
+The agent should identify one project bridge card, read only the needed project files, and say where it will write results back.

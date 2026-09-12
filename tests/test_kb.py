@@ -9,14 +9,14 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SPEC = importlib.util.spec_from_file_location("kb_entry", ROOT / "kit" / "00-AI" / "scripts" / "kb.py")
+SPEC = importlib.util.spec_from_file_location("kb_entry", ROOT / "src" / "00-AI" / "scripts" / "kb.py")
 kb = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(kb)
 
 
 class CorePathTests(unittest.TestCase):
     def test_cli_entrypoint_stays_thin_after_module_split(self):
-        cli_path = ROOT / "kit" / "00-AI" / "scripts" / "kb.py"
+        cli_path = ROOT / "src" / "00-AI" / "scripts" / "kb.py"
         line_count = len(cli_path.read_text(encoding="utf-8").splitlines())
         self.assertLessEqual(line_count, 120)
 
@@ -1050,8 +1050,8 @@ class FirstRunDocumentationTests(unittest.TestCase):
 
 class ProjectBridgeNamingTests(unittest.TestCase):
     def test_project_rules_use_fact_verification_and_non_mechanical_handoffs(self):
-        agent_rules = (ROOT / "kit" / "00-AI" / "AGENTS.md").read_text(encoding="utf-8")
-        template = (ROOT / "kit" / "00-AI" / "templates" / "TPL-project-bridge-card.md").read_text(
+        agent_rules = (ROOT / "src" / "00-AI" / "AGENTS.md").read_text(encoding="utf-8")
+        template = (ROOT / "src" / "00-AI" / "templates" / "TPL-project-bridge-card.md").read_text(
             encoding="utf-8"
         )
 
@@ -1061,7 +1061,7 @@ class ProjectBridgeNamingTests(unittest.TestCase):
         self.assertIn("只有确实需要其它窗口或 Agent 接手时才写交接卡", template)
 
     def test_project_bridge_template_routes_user_lessons_outside_managed_modules(self):
-        text = (ROOT / "kit" / "00-AI" / "templates" / "TPL-project-bridge-card.md").read_text(
+        text = (ROOT / "src" / "00-AI" / "templates" / "TPL-project-bridge-card.md").read_text(
             encoding="utf-8"
         )
 

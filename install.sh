@@ -144,7 +144,7 @@ fi
 
 if [[ -z "$SOURCE" && -n "${BASH_SOURCE[0]:-}" && -f "${BASH_SOURCE[0]}" ]]; then
   SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  if [[ -f "$SCRIPT_DIR/kit/00-AI/scripts/kb.py" ]]; then
+  if [[ -f "$SCRIPT_DIR/src/00-AI/scripts/kb.py" ]]; then
     SOURCE="$SCRIPT_DIR"
   fi
 fi
@@ -167,7 +167,7 @@ if [[ -z "$SOURCE" ]]; then
   tar -xzf "$ARCHIVE" -C "$SOURCE" --strip-components=1
 fi
 
-if [[ ! -f "$SOURCE/kit/00-AI/scripts/kb.py" ]]; then
+if [[ ! -f "$SOURCE/src/00-AI/scripts/kb.py" ]]; then
   echo "invalid kit source: $SOURCE" >&2
   exit 1
 fi
@@ -190,7 +190,7 @@ if [[ "$ALLOW_PROTECTED_ADAPTER_WRITE" -eq 1 ]]; then
   ARGS+=(--allow-protected-adapter-write)
 fi
 
-python3 "$SOURCE/kit/00-AI/scripts/kb.py" "$COMMAND" "$TARGET" "${ARGS[@]}"
+python3 "$SOURCE/src/00-AI/scripts/kb.py" "$COMMAND" "$TARGET" "${ARGS[@]}"
 
 if [[ "$DRY_RUN" -eq 0 ]]; then
   if [[ "$LANGUAGE" == "zh-CN" ]]; then
