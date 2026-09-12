@@ -18,7 +18,7 @@ test ! -e "$TARGET"
 OBSIDIAN_AI_WORKFLOW_KIT_SOURCE="$ROOT" bash "$ROOT/install.sh" "$TARGET" >/tmp/obsidian-ai-workflow-kit-install.log
 test -f "$TARGET/00-AI/START-HERE.md"
 test -f "$TARGET/00-AI/scripts/kb.py"
-test -f "$TARGET/.obsidian-ai-workflow-kit/manifest.json"
+test -f "$TARGET/00-AI/config/kit-manifest.json"
 python3 "$TARGET/00-AI/scripts/kb.py" health-check --vault "$TARGET" --mode barebone >/tmp/obsidian-ai-workflow-kit-health.log
 OBSIDIAN_AI_WORKFLOW_KIT_SOURCE="$ROOT" bash "$ROOT/install.sh" --update --dry-run "$TARGET" >/tmp/obsidian-ai-workflow-kit-update-dry-run.log
 grep -q "would upgrade core files" /tmp/obsidian-ai-workflow-kit-update-dry-run.log
@@ -33,8 +33,8 @@ OBSIDIAN_AI_WORKFLOW_KIT_SOURCE="$ROOT" bash "$ROOT/install.sh" --overwrite "$TA
 OBSIDIAN_AI_WORKFLOW_KIT_SOURCE="$ROOT" bash "$ROOT/install.sh" --mode barebone "$BAREBONE_TARGET" >/tmp/obsidian-ai-workflow-kit-barebone.log
 test -f "$BAREBONE_TARGET/00-AI/START-HERE.md"
 test -f "$BAREBONE_TARGET/00-AI/AGENTS.md"
-test -f "$BAREBONE_TARGET/AGENTS.md"
-test -f "$BAREBONE_TARGET/CLAUDE.md"
+test -f "$BAREBONE_TARGET/00-AI/integrations/AGENTS.md"
+test -f "$BAREBONE_TARGET/00-AI/integrations/CLAUDE.md"
 test -d "$BAREBONE_TARGET/00-AI/governance"
 test -f "$BAREBONE_TARGET/00-AI/pipeline/README.md"
 test -f "$BAREBONE_TARGET/00-AI/pipeline/source-to-knowledge-workflow.md"
@@ -60,13 +60,13 @@ python3 "$BAREBONE_TARGET/00-AI/scripts/kb.py" health-check --vault "$BAREBONE_T
 OBSIDIAN_AI_WORKFLOW_KIT_SOURCE="$ROOT" bash "$ROOT/install.sh" --language zh-CN "$ZH_TARGET" >/tmp/obsidian-ai-workflow-kit-zh.log
 grep -q '语言：中文' "$ZH_TARGET/00-入口/开始这里.md"
 grep -q '00-入口/开始这里.md' "$ZH_TARGET/00-入口/开始这里.md"
-test -f "$ZH_TARGET/AGENTS.md"
-test -f "$ZH_TARGET/CLAUDE.md"
-grep -q '00-入口/开始这里.md' "$ZH_TARGET/CLAUDE.md"
-grep -q '90-系统/' "$ZH_TARGET/CLAUDE.md"
-! grep -q '90-系统/AI/' "$ZH_TARGET/CLAUDE.md"
-grep -q '00-入口/开始这里.md' "$ZH_TARGET/AGENTS.md"
-! grep -q '90-系统/AI/' "$ZH_TARGET/AGENTS.md"
+test -f "$ZH_TARGET/90-系统/接入/AGENTS.md"
+test -f "$ZH_TARGET/90-系统/接入/CLAUDE.md"
+grep -q '00-入口/开始这里.md' "$ZH_TARGET/90-系统/接入/CLAUDE.md"
+grep -q '90-系统/' "$ZH_TARGET/90-系统/接入/CLAUDE.md"
+! grep -q '90-系统/AI/' "$ZH_TARGET/90-系统/接入/CLAUDE.md"
+grep -q '00-入口/开始这里.md' "$ZH_TARGET/90-系统/接入/AGENTS.md"
+! grep -q '90-系统/AI/' "$ZH_TARGET/90-系统/接入/AGENTS.md"
 test ! -e "$ZH_TARGET/00-AI/START-HERE.md"
 test -f "$ZH_TARGET/10-项目/项目登记表.md"
 test -f "$ZH_TARGET/20-资料/README.md"
@@ -87,7 +87,7 @@ import json
 import sys
 from pathlib import Path
 
-manifest = json.loads((Path(sys.argv[1]) / ".obsidian-ai-workflow-kit" / "manifest.json").read_text(encoding="utf-8"))
+manifest = json.loads((Path(sys.argv[1]) / "90-系统/配置/kit-manifest.json").read_text(encoding="utf-8"))
 assert manifest["language"] == "zh-CN"
 assert "00-入口/开始这里.md" in manifest["files"]
 PY

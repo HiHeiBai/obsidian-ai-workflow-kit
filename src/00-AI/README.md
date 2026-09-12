@@ -15,6 +15,6 @@ Use the vault home for daily work. This area contains the rules and tools that s
 - [Recall / 召回](recall/README.md)
 - [Material intake / 资料整理](pipeline/README.md)
 
-完整安装还包含使用指南、演示和动态视图；最小安装可先建立自己的项目。脚本通过命令行按需运行。根目录 AGENTS.md 和 CLAUDE.md 是 AI 自动发现入口，LICENSE 和 VERSION 是授权与版本信息。
+完整安装还包含使用指南、演示和动态视图；最小安装可先建立自己的项目。脚本通过命令行按需运行。默认用首页的开工提示词启动 AI。授权和版本信息收在 about/，更新清单收在 config/kit-manifest.json；中文安装对应「关于/」和「配置/」。如需自动发现入口，按需将 integrations/（中文为「接入/」）中的 AGENTS.md 或 CLAUDE.md 复制到知识库根目录；已有同名文件时合并指令，不要覆盖。
 
-Full installs also include guides, demonstrations, and dynamic views. Minimal installs are ready for your own projects. Root AGENTS.md and CLAUDE.md are agent discovery pointers; LICENSE and VERSION hold license and version information.
+Full installs also include guides, demonstrations, and dynamic views. Minimal installs are ready for your own projects. Use the startup prompt on the home page to begin an AI session. License and version information live in about/, and the update manifest lives in config/kit-manifest.json. For optional automatic discovery, copy the matching AGENTS.md or CLAUDE.md from integrations/ to the vault root; merge instructions if a root file already exists. Keeping these templates in the system directory does not enable root-level discovery.

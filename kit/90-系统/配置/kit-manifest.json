@@ -82,7 +82,7 @@
       "sha256": "72bfaed43b87fa0d4b2e59ce595e424fc41cfce6dde8b8873725584236a93993"
     },
     "90-\u7cfb\u7edf/README.md": {
-      "sha256": "0df8a3b36afba6302406ca49e4cd27f882531e1add26630002efb4150865f011"
+      "sha256": "954352d4c8c93062d0c45a0ab1ea78cc8525a5bf7bc375e97ce0d9b239fe15aa"
     },
     "90-\u7cfb\u7edf/\u4f7f\u7528\u6307\u5357/10-minute-first-run.md": {
       "sha256": "63ed2d54762e9f0b1badf4290cbac22b436a5444e0c9cc851dd1487a4e973914"
@@ -115,19 +115,25 @@
       "sha256": "1d766523a2667dc5cd3bed711ebf9209d19b47585a0ed707278f00f9ff462086"
     },
     "90-\u7cfb\u7edf/\u4f7f\u7528\u6307\u5357/legal/content-license.md": {
-      "sha256": "ca480756086cbfb0acb8a083ce466fb0f0c6fbec8e821ec7340c56f995d54b63"
+      "sha256": "22823c46f857087638bf019a84538a7fd0dc437a4f144ff2d125ede961837a3f"
     },
     "90-\u7cfb\u7edf/\u4f7f\u7528\u6307\u5357/legal/notice.md": {
       "sha256": "5b5bea58bc63f822f273af5a9e58b4bb19b70a4fa4dc6abfc476274a91ad4270"
     },
     "90-\u7cfb\u7edf/\u4f7f\u7528\u6307\u5357/migration.md": {
-      "sha256": "fb2078b63bc9bd0269daedbf598f6fd8cef19ea48f7db1e1619403e6f0cf5686"
+      "sha256": "d4df964c48ccd05dc14f2b7e2b853a31424149fde43d0d0ae67334bc820e7a3e"
     },
     "90-\u7cfb\u7edf/\u4f7f\u7528\u6307\u5357/templates.md": {
       "sha256": "643735170cf7d54fd898fedda35c12f4d9b3064697521955cbad997ed9a666cf"
     },
     "90-\u7cfb\u7edf/\u4f7f\u7528\u6307\u5357/templates.zh-CN.md": {
       "sha256": "76d05765b5b92d52fdf713c9d23dee6da60eb9ccd482334d89724c687b3640a6"
+    },
+    "90-\u7cfb\u7edf/\u5173\u4e8e/LICENSE": {
+      "sha256": "f5eee63fb76b6585d82d7c3e7e7c5136331316c3256e72cb6bdf587f234d20de"
+    },
+    "90-\u7cfb\u7edf/\u5173\u4e8e/VERSION": {
+      "sha256": "d84c9e596c7d6a94e5f74579ef8d8912a807b0d28582474900ad35dfb3edfcf4"
     },
     "90-\u7cfb\u7edf/\u53ec\u56de/README.md": {
       "sha256": "7a9dd8d718986c0ca34e76581afcfac7deb3f8572a78a6b6396f61912a37c813"
@@ -140,6 +146,12 @@
     },
     "90-\u7cfb\u7edf/\u53ec\u56de/\u793a\u4f8b\u53ec\u56de\u94fe.md": {
       "sha256": "c81bd54bac0651ef4598933481c6ed3f94ac7b9ce7e228a5c00c51effd9a4a9d"
+    },
+    "90-\u7cfb\u7edf/\u63a5\u5165/AGENTS.md": {
+      "sha256": "1f5fca37ae863cf7f46f9cd3357c7c95524578f534023c55bc8294847a2eca44"
+    },
+    "90-\u7cfb\u7edf/\u63a5\u5165/CLAUDE.md": {
+      "sha256": "1f5fca37ae863cf7f46f9cd3357c7c95524578f534023c55bc8294847a2eca44"
     },
     "90-\u7cfb\u7edf/\u6a21\u677f/TPL-Agent\u4ea4\u63a5\u5361.md": {
       "sha256": "f20f21eda9242cecf60a12d2b84c0d88308daae6b19153192ea994ce1d96c83c"
@@ -202,7 +214,7 @@
       "sha256": "5e8302a1a40e6503644f03ef1dacf7ca945fe2231adb62a30f1a287ccd3fbd1b"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/README.md": {
-      "sha256": "9c014b49221c183c2d1b2e765b657b76c9125912dcd9ad988108f1d573222a99"
+      "sha256": "b86a9d835980a700620ea7517af689747326309c6d8ef2109d2a9f4acc89fc5f"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb.py": {
       "sha256": "a62c12a1cd6a5871b61c9b0aa913b24af0f3a1318baa988844fd7cc7dfb500ba"
@@ -214,13 +226,13 @@
       "sha256": "5bc0b1c2a898f8fd9149867a1a17ad41ed3b3920576d00da2104312be20fa763"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/config.py": {
-      "sha256": "11f7a7b92902704b94345d86bb4fa089de84654d01788e316ab476efb91807b3"
+      "sha256": "0f211ba12e8d4e2ba9916a53fed04e428e0d9d59583045d737bd071be63799c2"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/health.py": {
-      "sha256": "b975c58be690674df163bdef208cab0dcce55169e153b767456ec8dbd774867d"
+      "sha256": "0fef643191b50c48409868b8a29545ad67dbebdc4295147b7fbd604803c34598"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/install.py": {
-      "sha256": "15962c2bc9469a9805941e7deaf5eec0d787be6beef1512c205161e8559491d8"
+      "sha256": "b48f9e25695cba4f3b3347d79a3c85be3dd5e239c9f51d98ecea0f4a3f7a98d0"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/intake.py": {
       "sha256": "f7d64d2dccaa95b6bd08464551f2934be2d3e15754e5ca79351f2c3a89cad7f5"
@@ -235,7 +247,7 @@
       "sha256": "901fb371ffec66ebcab87324c598dccee9912d1f74b5d07cb28999784d5a128c"
     },
     "90-\u7cfb\u7edf/\u811a\u672c/kb/utils.py": {
-      "sha256": "55715e1efd604c56567835e3fbba2cc71c5a9cc1cf3c14b9d3d66a08b7482e22"
+      "sha256": "d1c91a1aa62d7e6fde9d7c6c45fde6c6f691c8fa07c732254bd98599f43e73eb"
     },
     "90-\u7cfb\u7edf/\u89c4\u5219/README.md": {
       "sha256": "819fbdef9c67fd8200e82d5dada5d38b2e70553db69490a7c2b78da04c079448"
@@ -267,18 +279,6 @@
     "90-\u7cfb\u7edf/\u914d\u7f6e/\u8fc7\u65f6\u6982\u5ff5.txt": {
       "sha256": "d43b9ec1abc7ff569b5227b586313bf5977de6c9fc6c3cf76d702e776ba1880f"
     },
-    "AGENTS.md": {
-      "sha256": "1f5fca37ae863cf7f46f9cd3357c7c95524578f534023c55bc8294847a2eca44"
-    },
-    "CLAUDE.md": {
-      "sha256": "1f5fca37ae863cf7f46f9cd3357c7c95524578f534023c55bc8294847a2eca44"
-    },
-    "LICENSE": {
-      "sha256": "f5eee63fb76b6585d82d7c3e7e7c5136331316c3256e72cb6bdf587f234d20de"
-    },
-    "VERSION": {
-      "sha256": "f6ee69bf1c4b27a242266ccb5aeb4aa8c8306345b9ebe4ff7335b8c940452b81"
-    },
     "\u9996\u9875.md": {
       "sha256": "47ba498c993ad43db0151bb46a1a2c86a41de52f42c2660857df639e9964ad3b"
     }
@@ -287,6 +287,6 @@
   "language": "zh-CN",
   "mode": "full",
   "schema": 1,
-  "source_version": "0.12.1",
-  "updated_at": "2026-09-12T02:21:35+00:00"
+  "source_version": "0.13.0",
+  "updated_at": "2026-09-12T02:32:50+00:00"
 }

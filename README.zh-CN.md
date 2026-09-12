@@ -181,7 +181,9 @@ GitHub 的 `kit/` 和中文 full 安装使用相同的日常目录：
 
 日常先看首页，再按任务进入项目、资料或经验资产。系统规则和参考说明集中在 `90-系统/`，不用逐个浏览才能开始。
 
-根目录另外保留 `AGENTS.md`、`CLAUDE.md` 供 AI 自动发现入口，以及 `LICENSE`、`VERSION` 记录授权和版本。隐藏目录 `.obsidian-ai-workflow-kit/` 保存更新清单。
+默认根目录只有首页和功能目录。需要 AI 协作时，把首页提供的开工提示词发给 AI 即可。许可证和版本信息收在 `90-系统/关于/`，更新清单收在 `90-系统/配置/kit-manifest.json`。
+
+如果希望 Codex 或 Claude Code 自动发现入口，可按需把 `90-系统/接入/` 中对应的 `AGENTS.md` 或 `CLAUDE.md` 复制到知识库根目录；默认不启用根目录自动发现。已有同名指令文件时，将开工指令合并进去，不要覆盖原文件。
 
 English 安装沿用英文目录，详见 [English guide](README.md)。
 
@@ -218,4 +220,4 @@ install.sh                 已有库与多语言安装入口
 
 ## Version
 
-当前版本：`0.12.1`。见 [CHANGELOG.md](CHANGELOG.md)。
+当前版本：`0.13.0`。见 [CHANGELOG.md](CHANGELOG.md)。

@@ -80,10 +80,10 @@ class InstalledLayoutTests(unittest.TestCase):
                     self.run_cli(CLI, *args, "--dry-run", cwd=outside)
                     self.assertFalse(vault.exists(), "Fresh dry run must not create the target")
                     self.run_cli(CLI, *args, cwd=outside)
-                    visible = {p.name for p in vault.iterdir() if not p.name.startswith(".")}
+                    visible = {p.name for p in vault.iterdir()}
                     self.assertEqual(
                         visible,
-                        layout["dirs"] | {layout["home"], "AGENTS.md", "CLAUDE.md", "LICENSE", "VERSION"},
+                        layout["dirs"] | {layout["home"]},
                     )
                     self.assert_home_links(vault, vault / layout["home"])
                     help_dir, examples = vault / layout["help"], vault / layout["examples"]
@@ -148,6 +148,7 @@ class InstalledLayoutTests(unittest.TestCase):
                         "examples/filled-example/current-state.md": "# My customized example\n",
                         "docs/private-note.md": "# Private, unmanaged note\n",
                         "my-notes/idea.md": "# My own idea\n",
+                        "AGENTS.md": "# My custom agent boundary\n",
                     }
                     for relative, content in preserved.items():
                         path = vault / relative
@@ -161,7 +162,7 @@ class InstalledLayoutTests(unittest.TestCase):
                     self.run_cli(CLI, *args, cwd=outside)
                     for relative, content in preserved.items():
                         self.assertEqual((vault / relative).read_text(encoding="utf-8"), content)
-                    for retired in ("README.md", "README.zh-CN.md", "CHANGELOG.md", "install.sh", "docs/release/release-checklist.md"):
+                    for retired in ("README.md", "README.zh-CN.md", "CHANGELOG.md", "install.sh", "LICENSE", "VERSION", "CLAUDE.md", ".obsidian-ai-workflow-kit/manifest.json", "docs/release/release-checklist.md"):
                         self.assertFalse((vault / retired).exists(), retired)
                     self.assertTrue((vault / layout["help"] / "30-second-demo.md").is_file())
                     self.assertTrue((vault / layout["examples"] / "filled-example/current-state.md").is_file())

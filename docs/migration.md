@@ -2,11 +2,19 @@
 
 Use this kit gradually. Do not rebuild an existing Obsidian vault.
 
+## Upgrading to v0.13: a quieter vault root
+
+Fresh full and barebone vaults contain only the home page and functional directories at the root. Start AI work by copying the prompt from the home page. `AGENTS.md` and `CLAUDE.md` are now optional templates under `00-AI/integrations/` (`90-系统/接入/` in Chinese). Copy the matching template to the vault root only when you want automatic discovery; if a root instruction file already exists, merge the startup instruction instead of overwriting it. Templates in the system directory do not provide root-level automatic discovery by default.
+
+`LICENSE` and `VERSION` move to `00-AI/about/` (`90-系统/关于/`). Full and barebone update manifests move to `00-AI/config/kit-manifest.json` (`90-系统/配置/kit-manifest.json`). The updater reads the previous root manifest so existing managed installations can upgrade.
+
+Preview with `--update --dry-run`, retaining your existing language and mode. Upgrades remove the old managed root files only when they still match their recorded content. Modified root instructions and other user-owned files are preserved and may remain visible; review them before moving or deleting anything yourself. Shared-core keeps its existing scope and retains a legacy root manifest when one is already present.
+
 ## Upgrading to v0.12: source and vault layout
 
 The GitHub repository keeps maintained templates in `src/`; `kit/` is a complete Chinese vault ready to open after downloading the ZIP. Run the installer from the repository root; the installed CLI keeps its existing path. Re-run `install.sh --update` from the new repository (or use the remote installer), retaining your existing mode and language, and preview with `--dry-run` first.
 
-A new full installation has one home page and working directories. User guides and examples are inside the system directory: `00-AI/help` and `00-AI/examples` in English, or `90-系统/使用指南` and `90-系统/示例` in Chinese. Repository READMEs, installer, changelog, release checklists, and development plans are no longer installed. Root agent pointers, license, and version remain.
+A new full installation has one home page and working directories. User guides and examples are inside the system directory: `00-AI/help` and `00-AI/examples` in English, or `90-系统/使用指南` and `90-系统/示例` in Chinese. Repository READMEs, installer, changelog, release checklists, and development plans are no longer installed. Version 0.12 retained root agent pointers, license, and version; version 0.13 moves them into the system directory as described above.
 
 Managed upgrades remove retired kit files only when they still match their recorded hashes. Modified old guides/examples and untracked user notes stay in place and are reported for review; this can leave old directories present. Review those documents before moving them yourself. Empty retired directories are removed. The updater does not rewrite private note links to moved documents, so review links from your own notes if they referenced the old `docs/` or `examples/` paths. Shared-core installations keep their ownership boundary and do not adopt the new homepage or user directories.
 
@@ -42,10 +50,10 @@ The migration stops before writing when a task destination already exists or a p
 
 ## If You Are Starting Fresh
 
-1. Clone or download this repository.
-2. Open the folder in Obsidian with **Open folder as vault**.
-3. Read `00-AI/START-HERE.md`.
-4. Create your first real project bridge card:
+1. Download the repository ZIP and open its `kit/` folder in Obsidian for the ready-to-use Chinese vault, or install an English vault with `install.sh --lang en`.
+2. Open the home page (`首页.md` in Chinese or `index.md` in English).
+3. Copy its AI startup prompt into your agent session.
+4. Create your first real project bridge card. The following commands use English installation paths:
 
 ```bash
 python3 00-AI/scripts/kb.py new-project my-project --name "My Project" --root "/path/to/project"
@@ -122,7 +130,7 @@ python3 00-AI/scripts/kb.py stale-check --vault "/path/to/your-vault"
 
 ## Keeping The Kit Updated
 
-New installs write a small manifest at `.obsidian-ai-workflow-kit/manifest.json`. Future updates use it to distinguish kit-managed files from user-edited files.
+New full and barebone installs write a small manifest at `00-AI/config/kit-manifest.json` (`90-系统/配置/kit-manifest.json` in Chinese). Future updates use it to distinguish kit-managed files from user-edited files. Existing legacy manifests are recognized during upgrades; shared-core retains a legacy root manifest when present.
 
 Preview an update first:
 

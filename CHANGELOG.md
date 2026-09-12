@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.13.0 - 2026-09-12
+
+- Reduced a new vault root to its home page and functional directories. License, version, optional agent entry templates, and the update manifest now live in the system area.
+- Default AI startup uses the explicit home-page prompt; root auto-discovery files can be enabled optionally.
+- Managed upgrades preserve customized legacy root files and existing shared-core ownership.
+
 ## 0.12.1 - 2026-09-12
 
 - Made `kit/` a complete Chinese vault that can be opened directly after downloading the repository ZIP. Its visible directories and files match a Chinese full installation.

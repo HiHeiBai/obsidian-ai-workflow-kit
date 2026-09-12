@@ -208,7 +208,9 @@ index.md                   start here as a person
 40-ExternalSources/        source analysis cards
 ```
 
-Root-level `AGENTS.md` and `CLAUDE.md` point agents to the startup entry. `LICENSE` and `VERSION` retain package information, and a hidden `.obsidian-ai-workflow-kit/` directory records managed files for updates.
+The default vault root contains only the home page and working directories. Start an AI session with the prompt on the home page. License and version information live in `00-AI/about/`; the updater keeps its manifest in `00-AI/config/kit-manifest.json`.
+
+For optional automatic agent discovery, copy the matching `AGENTS.md` or `CLAUDE.md` template from `00-AI/integrations/` to the vault root. Templates kept inside the system directory do not enable root-level discovery. If you already have a root instruction file, merge the startup instruction into it instead of replacing it.
 
 Chinese installations use localized folder and home-page names. See [the Chinese guide](README.zh-CN.md).
 
@@ -245,4 +247,4 @@ This is a workflow kit, not an automation platform. If project state, decisions,
 
 ## Version
 
-Current version: `0.12.1`. See [CHANGELOG.md](CHANGELOG.md).
+Current version: `0.13.0`. See [CHANGELOG.md](CHANGELOG.md).

@@ -13,6 +13,7 @@ from .config import (
     ADAPTER_POLICY_FILE,
     DEFAULT_INSTALL_MODE,
     MANIFEST_DIR,
+    find_manifest_path,
     MANIFEST_FILE,
     MANIFEST_SCHEMA,
     SKIP_INSTALL_PARTS,
@@ -32,12 +33,14 @@ TEXT_INSTALL_SUFFIXES = {".md", ".txt", ".json", ".csv", ".yml", ".yaml", ".base
 def read_kit_version(root: Path) -> str:
     version_file = root / "VERSION"
     if not version_file.exists():
+        version_file = next((root / p for p in ["90-系统/关于/VERSION", "00-AI/about/VERSION"] if (root / p).exists()), version_file)
+    if not version_file.exists():
         return "unknown"
     return version_file.read_text(encoding="utf-8").strip() or "unknown"
 
 
 def manifest_path(root: Path) -> Path:
-    return root / MANIFEST_DIR / MANIFEST_FILE
+    return find_manifest_path(root)
 
 
 def adapter_policy_path(root: Path) -> Path:
@@ -115,11 +118,12 @@ def save_manifest(root: Path, manifest: dict, source_root: Path, mode: str, dry_
         manifest["language"] = language
     else:
         manifest.setdefault("language", "en")
-    path = manifest_path(root)
+    old_path = manifest_path(root)
+    path = old_path if mode == "shared-core" else root / language_target_path(manifest["language"], "00-AI/config/kit-manifest.json")
     current = None
-    if path.exists():
+    if old_path.exists():
         try:
-            current = json.loads(path.read_text(encoding="utf-8"))
+            current = json.loads(old_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             pass
     current_content = (
@@ -130,7 +134,7 @@ def save_manifest(root: Path, manifest: dict, source_root: Path, mode: str, dry_
     desired_content = {
         key: value for key, value in manifest.items() if key != "updated_at"
     }
-    unchanged = current_content == desired_content
+    unchanged = current_content == desired_content and path == old_path
     display = path.relative_to(root).as_posix()
     if dry_run:
         print(f"{'unchanged' if unchanged else 'would update'} {display}")
@@ -144,6 +148,13 @@ def save_manifest(root: Path, manifest: dict, source_root: Path, mode: str, dry_
     )
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if old_path != path and old_path.exists():
+        old_path.unlink()
+        try:
+            old_path.parent.rmdir()
+        except OSError:
+            pass
+
 
 
 def record_managed_file(manifest: dict, relative: Path, source_hash: str) -> None:

@@ -196,7 +196,17 @@ LANGUAGE_TEMPLATE_ROOT = "00-AI/i18n"
 VALID_LANGUAGES = ("en", "zh-CN")
 DEFAULT_LANGUAGE = "en"
 DEFAULT_INSTALL_MODE = "barebone"
+ROOT_METADATA_RENAMES = [
+    ("AGENTS.md", "00-AI/integrations/AGENTS.md"),
+    ("CLAUDE.md", "00-AI/integrations/CLAUDE.md"),
+    ("LICENSE", "00-AI/about/LICENSE"),
+    ("VERSION", "00-AI/about/VERSION"),
+]
 ZH_CN_TARGET_RENAMES = [
+    ("AGENTS.md", "90-系统/接入/AGENTS.md"),
+    ("CLAUDE.md", "90-系统/接入/CLAUDE.md"),
+    ("LICENSE", "90-系统/关于/LICENSE"),
+    ("VERSION", "90-系统/关于/VERSION"),
     ("00-AI/help", "90-系统/使用指南"),
     ("00-AI/examples", "90-系统/示例"),
     ("00-AI/START-HERE.md", "00-入口/开始这里.md"),
@@ -261,7 +271,7 @@ ZH_CN_TARGET_RENAMES.extend([
     ("examples", "90-系统/示例"),
 ])
 LANGUAGE_TARGET_RENAMES = {
-    "en": [("docs", "00-AI/help"), ("examples", "00-AI/examples")],
+    "en": ROOT_METADATA_RENAMES + [("docs", "00-AI/help"), ("examples", "00-AI/examples")],
     "zh-CN": ZH_CN_TARGET_RENAMES,
 }
 ZH_CN_TEXT_REFERENCE_REPLACEMENTS = [
@@ -439,7 +449,7 @@ def localize_text_references(text: str, language: str) -> str:
         protected.append(match.group(0))
         return f"KITSOURCEPLACEHOLDER{len(protected)-1}END"
     text = re.sub(r"(?:src/|docs/release/|docs/superpowers/)[^\s`\"'<>)]*", preserve_source, text)
-    replacements = sorted(LANGUAGE_TARGET_RENAMES.get(selected, []), key=lambda pair: len(pair[0]), reverse=True)
+    replacements = sorted([(a, b) for a, b in LANGUAGE_TARGET_RENAMES.get(selected, []) if a not in {"AGENTS.md", "CLAUDE.md", "LICENSE", "VERSION"}], key=lambda pair: len(pair[0]), reverse=True)
     # Replace paths in one pass: an already expanded destination must not be
     # expanded again (e.g. 00-AI/examples -> 00-AI/00-AI/examples).
     mapping = dict(replacements)
@@ -455,3 +465,14 @@ def localize_text_references(text: str, language: str) -> str:
     for index, value in enumerate(protected):
         text = text.replace(f"KITSOURCEPLACEHOLDER{index}END", value)
     return text
+
+
+def find_manifest_path(root: Path) -> Path:
+    """Read legacy working vaults as well as the uncluttered delivery layout."""
+    candidates = [root / MANIFEST_DIR / MANIFEST_FILE,
+                  root / "90-系统/配置/kit-manifest.json",
+                  root / "00-AI/config/kit-manifest.json"]
+    existing = [p for p in candidates if p.exists()]
+    if len(existing) > 1:
+        raise SystemExit("multiple kit manifests found; reconcile them before updating: " + ", ".join(str(p) for p in existing))
+    return existing[0] if existing else candidates[0]

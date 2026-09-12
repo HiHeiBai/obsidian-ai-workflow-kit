@@ -6,14 +6,14 @@ import json
 import re
 from pathlib import Path
 
-from .config import DEFAULT_LANGUAGE, MANIFEST_DIR, MANIFEST_FILE, validate_language
+from .config import DEFAULT_LANGUAGE, MANIFEST_DIR, MANIFEST_FILE, validate_language, find_manifest_path
 
 def vault_root(value: str | None) -> Path:
     return Path(value or ".").resolve()
 
 
 def vault_language(root: Path) -> str:
-    path = root / MANIFEST_DIR / MANIFEST_FILE
+    path = find_manifest_path(root)
     if not path.exists():
         return DEFAULT_LANGUAGE
     try:
@@ -89,7 +89,7 @@ def write_file(path: Path, content: str, dry_run: bool) -> None:
 def repo_root() -> Path:
     current = Path(__file__).resolve()
     for parent in current.parents:
-        if (parent / MANIFEST_DIR / MANIFEST_FILE).exists():
+        if find_manifest_path(parent).exists():
             return parent
         if (parent / "VERSION").exists() and (parent / "README.md").exists():
             return parent

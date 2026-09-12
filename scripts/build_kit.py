@@ -11,7 +11,8 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = '.obsidian-ai-workflow-kit/manifest.json'
+MANIFEST = '90-系统/配置/kit-manifest.json'
+LEGACY_MANIFEST = '.obsidian-ai-workflow-kit/manifest.json'
 
 
 def files(root):
@@ -50,8 +51,8 @@ def main():
             print('\n'.join(different))
             return 1
         # Refuse to overwrite work someone has added to or edited in a copied kit.
-        old = json.loads(current.get(MANIFEST, b'{"files":{}}')).get('files', {})
-        unsafe = [p for p, data in current.items() if p != MANIFEST and p in different
+        old = json.loads(current.get(MANIFEST, current.get(LEGACY_MANIFEST, b'{"files":{}}'))).get('files', {})
+        unsafe = [p for p, data in current.items() if p not in {MANIFEST, LEGACY_MANIFEST} and p in different
                   and hashlib.sha256(data).hexdigest() != old.get(p, {}).get('sha256')]
         if unsafe:
             raise SystemExit('Refusing to replace user-modified/unmanaged files:\n' + '\n'.join(unsafe))

@@ -33,7 +33,7 @@ curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/m
 curl -fsSL https://raw.githubusercontent.com/HiHeiBai/obsidian-ai-workflow-kit/main/install.sh | bash -s -- --update --mode barebone "/path/to/your-vault"
 ```
 
-`--update` upgrades managed kit files from the latest GitHub version. It uses `.obsidian-ai-workflow-kit/manifest.json` to tell whether a file is still the original kit file or has been changed by the user.
+`--update` upgrades managed kit files from the latest GitHub version. It uses `00-AI/config/kit-manifest.json` (or the legacy root manifest for established shared-core consumers) to tell whether a file is still the original kit file or has been changed by the user.
 
 Default behavior:
 
@@ -200,7 +200,7 @@ Default behavior:
 - Creates missing files and directories.
 - Skips existing files.
 - Does not overwrite unless `--overwrite` is passed.
-- Records managed kit files in `.obsidian-ai-workflow-kit/manifest.json` so future updates can be safer.
+- Records managed kit files in `00-AI/config/kit-manifest.json` for new full/barebone installs so future updates can be safer.
 - Refuses to install into this kit repository or into a child directory of it.
 
 ## Upgrade Core

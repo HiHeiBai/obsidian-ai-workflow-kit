@@ -15,6 +15,7 @@ from .config import (
     EXTERNAL_BASE_TYPES,
     LOCAL_TASK_REQUIRED_FIELDS,
     MANIFEST_DIR,
+    find_manifest_path,
     MANIFEST_FILE,
     MANIFEST_SCHEMA,
     PROJECT_ENTRY_ALL_STATUSES,
@@ -58,7 +59,7 @@ def load_stale_patterns(root: Path) -> list[str]:
 
 
 def detect_vault_language(root: Path) -> str:
-    path = root / MANIFEST_DIR / MANIFEST_FILE
+    path = find_manifest_path(root)
     if not path.exists():
         return DEFAULT_LANGUAGE
     try:
@@ -74,7 +75,7 @@ def detect_vault_language(root: Path) -> str:
 
 
 def detect_vault_mode(root: Path) -> str:
-    path = root / MANIFEST_DIR / MANIFEST_FILE
+    path = find_manifest_path(root)
     if not path.exists():
         return "full"
     try:
@@ -100,7 +101,7 @@ def check_required_paths(root: Path, mode: str = "full", language: str | None = 
 
 
 def check_managed_manifest(root: Path, expected_mode: str | None = None) -> list[str]:
-    path = root / MANIFEST_DIR / MANIFEST_FILE
+    path = find_manifest_path(root)
     if not path.exists():
         return [f"missing managed manifest: {MANIFEST_DIR}/{MANIFEST_FILE}"]
     try:
@@ -368,7 +369,7 @@ def health_checks_for_mode(root: Path, mode: str, language: str) -> list[tuple[s
         ("Base files", check_base_files(root, mode, language)),
         ("Base dependency metadata", check_base_dependency_metadata(root, language)),
     ]
-    if not (root / MANIFEST_DIR / MANIFEST_FILE).exists():
+    if not (find_manifest_path(root)).exists():
         checks.append(("private user paths", check_private_user_paths(root)))
     if mode == "full" and language == "en" and (root / "src/00-AI").is_dir():
         checks.append(("english README", check_english_readme(root)))

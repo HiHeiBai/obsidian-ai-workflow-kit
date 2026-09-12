@@ -875,14 +875,14 @@ class InstallLanguageTests(unittest.TestCase):
             health_args = argparse.Namespace(vault=str(target), mode="barebone")
             self.assertEqual(kb.health_check(health_args), 0)
 
-    def test_chinese_root_agent_entries_point_to_the_real_system_root(self):
+    def test_chinese_optional_agent_entries_point_to_the_real_system_root(self):
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "vault"
 
             kb.install_core(self.install_args(target, "zh-CN"))
 
             for filename in ("CLAUDE.md", "AGENTS.md"):
-                text = (target / filename).read_text(encoding="utf-8")
+                text = (target / "90-系统/接入" / filename).read_text(encoding="utf-8")
                 self.assertIn("00-入口/开始这里.md", text)
                 self.assertIn("90-系统/", text)
                 self.assertNotIn("90-系统/AI/", text)
