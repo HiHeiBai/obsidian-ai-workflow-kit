@@ -7,7 +7,9 @@ status: active
 
 这一层告诉 AI：如何把电脑上的资料整理成清晰、可召回、可维护的 Obsidian 知识库。
 
-## 六步流水线
+## 按需处理阶段
+
+只进行当前目标需要的阶段；解释资料可以止于对话，保存原文不要求同时新建分析卡或经验资产。
 
 | 步骤 | AI 要做什么 | 产物 |
 |---|---|---|
@@ -18,8 +20,8 @@ status: active
 | 5. Promote | 把高复用内容升舱为经验资产或问题知识卡 | 长期知识 |
 | 6. Maintain | 定期巡检、去重、标注过时、补召回字段 | 健康知识库 |
 
-## 必读文件
+## 按任务定位
 
-- `local-material-intake.md`
-- `source-to-knowledge-workflow.md`
-- `00-AI/recall/task-to-context-map.md`
+- 整理指定本机资料：`local-material-intake.md`。
+- 理解、收藏或提炼资料：`source-to-knowledge-workflow.md`。
+- 不知道任务需要哪些已有知识：`00-AI/recall/task-to-context-map.md`。

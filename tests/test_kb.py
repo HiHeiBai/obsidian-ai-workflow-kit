@@ -1056,7 +1056,10 @@ class ProjectBridgeNamingTests(unittest.TestCase):
         )
 
         self.assertIn("last_verified", agent_rules)
-        self.assertIn("30 days", agent_rules)
+        self.assertIn("30 天", agent_rules)
+        english_rules = (ROOT / "src/00-AI/i18n/en/00-AI/AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("last_verified", english_rules)
+        self.assertIn("30 days", english_rules)
         self.assertIn("文件变化或任务完成本身不触发交接卡", agent_rules)
         self.assertIn("只有确实需要其它窗口或 Agent 接手时才写交接卡", template)
 

@@ -13,8 +13,8 @@ startup_files:
   - "10-项目/01-示例项目/current-state.md"
   - "10-项目/01-示例项目/decisions.md"
 created: 2026-06-01
-updated: 2026-07-18
-last_verified: 2026-07-18
+updated: 2026-07-28
+last_verified: 2026-07-28
 next_action: Copy this example and replace the placeholder fields.
 ---
 

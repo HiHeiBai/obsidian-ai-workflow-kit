@@ -47,14 +47,17 @@ class DirectVaultTests(unittest.TestCase):
             vault.mkdir()
             with tarfile.open(fileobj=io.BytesIO(archive.stdout)) as bundle:
                 bundle.extractall(vault)
-            before = (vault / 'AGENTS.md').read_bytes()
             result = subprocess.run([sys.executable, '-B', str(ROOT / 'src/00-AI/scripts/kb.py'),
                                      'upgrade-core', str(vault), '--mode', 'full', '--language', 'zh-CN'],
                                     capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
             self.assertEqual({p.name for p in vault.iterdir()},
                              {'首页.md', '00-入口', '01-收件箱', '10-项目', '20-资料', '30-经验资产', '90-系统'})
-            self.assertEqual((vault / '90-系统/接入/AGENTS.md').read_bytes(), before)
+            # Unmodified managed instructions migrate to the current template,
+            # which may change between releases; custom-file preservation is
+            # covered separately by the upgrade tests.
+            self.assertEqual((vault / '90-系统/接入/AGENTS.md').read_bytes(),
+                             (ROOT / 'kit/90-系统/接入/AGENTS.md').read_bytes())
             result = subprocess.run([sys.executable, '-B', str(vault / '90-系统/脚本/kb.py'),
                                      'health-check', '--vault', str(vault)], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)

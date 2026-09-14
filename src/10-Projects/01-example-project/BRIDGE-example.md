@@ -13,8 +13,8 @@ startup_files:
   - "10-Projects/01-example-project/current-state.md"
   - "10-Projects/01-example-project/decisions.md"
 created: 2026-06-01
-updated: 2026-07-18
-last_verified: 2026-07-18
+updated: 2026-07-28
+last_verified: 2026-07-28
 next_action: Copy this example and replace the placeholder fields.
 ---
 

@@ -54,6 +54,16 @@ After review, run the same command without `--dry-run`. Re-running an unchanged 
 
 In `shared-core` mode, the public health check validates only required shared paths, the managed manifest and file hashes, and shared Base structure. The working vault must keep its own independent health check for private projects, Inbox, archives, and local extensions.
 
+## Maintain Each Rule Once
+
+Edit reusable behavior in `src/`, build `kit/`, run the release checks, preview the shared-core update, and import it. Do not edit generated output or the working-vault copy independently.
+
+A local extension states its applicable scope, links the shared rule, and contains only actual differences: directory mappings, private metadata, account or tool constraints, or user preferences. When a local improvement is reusable, promote the sanitized behavior into the shared rule and remove the duplicate local wording in the same change. Update active callers to the shared authority; retain retired text only as traceable history, not runtime placeholders.
+
+Rule entry points summarize triggers and link to the detailed contract. Keep card budgets and validation semantics in the write-back rule instead of repeating them in handbooks and project conventions. Language variants are maintained translations of the same source contract, not separate policy branches.
+
+The managed manifest proves what was imported, not what has been published to GitHub. Report local synchronization and remote publication separately.
+
 ## Allowed From This Kit Back To A Working Vault
 
 - Clearer generic naming.
@@ -80,7 +90,7 @@ Before promoting a change between a working vault and this kit:
 - [ ] Working-vault private state and local extensions are outside the managed shared-core boundary.
 - [ ] Shared-core files are changed only in the public kit, then imported through the managed manifest.
 - [ ] This kit passes the relevant release checks.
-- [ ] The working vault records the public version or imported rule in its own project bridge card.
+- [ ] The working vault uses its managed manifest as the authority for the imported version; its project bridge links to the current adoption record rather than duplicating version fields.
 
 ## Release Note Rule
 

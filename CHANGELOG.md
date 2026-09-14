@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.13.2 - Unreleased
+
+- Route known projects and files directly; load indexes and governance only when needed, with no fixed startup receipt.
+- Deliver Chinese and English agent rules separately while preserving compact cards, evidence and factual verification requirements.
+- Make durable writeback conditional and distinguish explicitly authorized private source collection from public reuse.
+
+- Consolidate scope, deduplication, source learning, and recall behavior into shared rules; local extensions keep only directory, metadata, and preference differences.
+- Remove mandatory intake receipts and duplicate card limits from agent entry points; distinguish local imports from remote publication.
+
 ## 0.13.1 - 2026-09-12
 
 - Simplified the homepage to one copyable AI deployment prompt; a dedicated agent guide handles setup, existing vaults, verification, and handoff.
